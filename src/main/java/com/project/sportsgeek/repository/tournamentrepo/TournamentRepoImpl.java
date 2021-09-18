@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository(value = "tournamentRepo")
-public class TournamentRepositoryImpl implements TournamentRepository {
+public class TournamentRepoImpl implements TournamentRepository {
     @Autowired
     NamedParameterJdbcTemplate jdbcTemplate;
 

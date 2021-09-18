@@ -18,12 +18,12 @@ public class StatisticsRepoImpl implements  StatisticsRepository {
     @Override
     public List<Statistics> findUserStatistics() {
 //        String sql = "select u.UserId,FirstName,LastName,UserName,sum(WinningPoints) as TotalWinningPoints " +
-//                "from Contest as bot inner join User as u on bot.UserId=u.UserId group by bot.UserId" +
+//                "from Contest as bot inner join Users as u on bot.UserId=u.UserId group by bot.UserId" +
 //                " order by TotalWinningPoints desc";
-//        String sql = "SELECT UserId, FirstName, LastName, UserName,AvailablePoints as TotalWinningPoints FROM User ORDER BY AvailablePoints DESC";
+//        String sql = "SELECT UserId, FirstName, LastName, UserName,AvailablePoints as TotalWinningPoints FROM Users ORDER BY AvailablePoints DESC";
 
         String sql = "SELECT u.UserId as UserId, FirstName, LastName, UserName, ProfilePicture, AvailablePoints " +
-                "FROM User as u LEFT JOIN Contest as c ON u.UserId=c.UserId WHERE u.Status=1 " +
+                "FROM Users as u LEFT JOIN Contest as c ON u.UserId=c.UserId WHERE u.Status=1 " +
                 "GROUP BY u.UserId ORDER BY AvailablePoints DESC";
         return jdbcTemplate.query(sql, new StatisticsRowMapper());
     }

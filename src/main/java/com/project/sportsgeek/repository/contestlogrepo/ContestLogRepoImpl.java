@@ -39,7 +39,7 @@ public class ContestLogRepoImpl implements ContestLogRepository {
     @Override
     public List<ContestLogWithUser> findAllContestLogForLastDays(int days) {
         String sql = "SELECT ContestLogId, StartDatetime, Team1, t1.ShortName as Team1Name, Team2, t2.ShortName as Team2Name, FirstName, LastName, OldTeamId, OldContestPoints, NewTeamId, NewContestPoints, Action, LogTimestamp " +
-                "FROM ContestLog as c INNER JOIN User as u ON c.UserId=u.UserId " +
+                "FROM ContestLog as c INNER JOIN Users as u ON c.UserId=u.UserId " +
                 "INNER JOIN Matches as m ON m.MatchId=c.MatchId " +
                 "INNER JOIN Team as t1 ON m.Team1=t1.TeamId INNER JOIN Team as t2 ON m.Team2=t2.TeamId " +
                 "WHERE LogTimestamp > DATE_SUB(CURRENT_TIMESTAMP(), INTERVAL :days DAY) " +
@@ -53,7 +53,7 @@ public class ContestLogRepoImpl implements ContestLogRepository {
     @Override
     public List<ContestLogWithUser> findAllContestLogAfterId(int contestLogId) {
         String sql = "SELECT ContestLogId, StartDatetime, Team1, t1.ShortName as Team1Name, Team2, t2.ShortName as Team2Name, FirstName, LastName, OldTeamId, OldContestPoints, NewTeamId, NewContestPoints, Action, LogTimestamp " +
-                "FROM ContestLog as c INNER JOIN User as u ON c.UserId=u.UserId " +
+                "FROM ContestLog as c INNER JOIN Users as u ON c.UserId=u.UserId " +
                 "INNER JOIN Matches as m ON m.MatchId=c.MatchId " +
                 "INNER JOIN Team as t1 ON m.Team1=t1.TeamId INNER JOIN Team as t2 ON m.Team2=t2.TeamId " +
                 "WHERE ContestLogId > :contestLogId " +
@@ -67,7 +67,7 @@ public class ContestLogRepoImpl implements ContestLogRepository {
     @Override
     public List<ContestLogFormatted> findAllContestLogFormattedForLastDays(int days) {
         String sql = "SELECT ContestLogId, StartDatetime, Team1, t1.ShortName as Team1Name, Team2, t2.ShortName as Team2Name, FirstName, LastName, OldTeamId, OldContestPoints, NewTeamId, NewContestPoints, Action, LogTimestamp " +
-                "FROM ContestLog as c INNER JOIN User as u ON c.UserId=u.UserId " +
+                "FROM ContestLog as c INNER JOIN Users as u ON c.UserId=u.UserId " +
                 "INNER JOIN Matches as m ON m.MatchId=c.MatchId " +
                 "INNER JOIN Team as t1 ON m.Team1=t1.TeamId INNER JOIN Team as t2 ON m.Team2=t2.TeamId " +
                 "WHERE LogTimestamp > DATE_SUB(CURRENT_TIMESTAMP(), INTERVAL :days DAY) " +
@@ -81,7 +81,7 @@ public class ContestLogRepoImpl implements ContestLogRepository {
     @Override
     public List<ContestLogFormatted> findAllContestLogFormattedAfterId(int contestLogId) {
         String sql = "SELECT ContestLogId, StartDatetime, Team1, t1.ShortName as Team1Name, Team2, t2.ShortName as Team2Name, FirstName, LastName, OldTeamId, OldContestPoints, NewTeamId, NewContestPoints, Action, LogTimestamp " +
-                "FROM ContestLog as c INNER JOIN User as u ON c.UserId=u.UserId " +
+                "FROM ContestLog as c INNER JOIN Users as u ON c.UserId=u.UserId " +
                 "INNER JOIN Matches as m ON m.MatchId=c.MatchId " +
                 "INNER JOIN Team as t1 ON m.Team1=t1.TeamId INNER JOIN Team as t2 ON m.Team2=t2.TeamId " +
                 "WHERE ContestLogId > :contestLogId " +

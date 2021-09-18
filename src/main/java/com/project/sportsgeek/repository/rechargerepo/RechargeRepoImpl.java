@@ -21,13 +21,13 @@ public class RechargeRepoImpl implements RechargeRepository {
 
     @Override
     public List<Recharge> findAllRecharge() {
-        String sql = "SELECT Recharge.UserId as UserId,UserName,Points,RechargeDatetime,RechargeId FROM Recharge Inner Join User on User.UserId = Recharge.UserId";
+        String sql = "SELECT Recharge.UserId as UserId,UserName,Points,RechargeDatetime,RechargeId FROM Recharge Inner Join Users on Users.UserId = Recharge.UserId";
         return jdbcTemplate.query(sql,new RechargeRowMapper());
     }
 
     @Override
     public Recharge findRechargeByRechargeId(int rechargeId) throws Exception {
-        String sql = "SELECT Recharge.UserId as UserId,UserName,Points,RechargeDatetime,RechargeId FROM Recharge Inner Join User on User.UserId = Recharge.UserId WHERE RechargeId = :rechargeId";
+        String sql = "SELECT Recharge.UserId as UserId,UserName,Points,RechargeDatetime,RechargeId FROM Recharge Inner Join Users on Users.UserId = Recharge.UserId WHERE RechargeId = :rechargeId";
         MapSqlParameterSource params = new MapSqlParameterSource("rechargeId", rechargeId);
         List<Recharge> rechargeList = jdbcTemplate.query(sql, params, new RechargeRowMapper());
         if(rechargeList.size() > 0){
@@ -39,7 +39,7 @@ public class RechargeRepoImpl implements RechargeRepository {
 
     @Override
     public List<Recharge> findRechargeByUserId(int userId) throws Exception {
-        String sql = "SELECT Recharge.UserId as UserId,UserName,Points,RechargeDatetime,RechargeId FROM Recharge Inner Join User on User.UserId = Recharge.UserId WHERE Recharge.UserId = :userId";
+        String sql = "SELECT Recharge.UserId as UserId,UserName,Points,RechargeDatetime,RechargeId FROM Recharge Inner Join Users on Users.UserId = Recharge.UserId WHERE Recharge.UserId = :userId";
         MapSqlParameterSource params = new MapSqlParameterSource("userId", userId);
         return jdbcTemplate.query(sql, params, new RechargeRowMapper());
     }

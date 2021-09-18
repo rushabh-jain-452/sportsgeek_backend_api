@@ -30,15 +30,15 @@ public class UserRepoImpl implements UserRepository {
 
 	@Override
 	public List<UserResponse> findAllUsers() {
-//		String sql = "SELECT * FROM User";
-		String sql = "SELECT User.UserId as UserId, FirstName, LastName, User.GenderId, Gender.Name as GenderName, User.RoleId, Role.Name as RoleName, Username, AvailablePoints, ProfilePicture, Status, EmailContact.EmailId as Email, MobileContact.MobileNumber as MobileNumber FROM User inner join EmailContact on User.UserId=EmailContact.UserId inner join Gender on User.GenderId=Gender.GenderId inner join Role on User.RoleId=Role.RoleId inner join MobileContact on User.UserId=MobileContact.UserId ORDER BY User.UserId";
+//		String sql = "SELECT * FROM Users";
+		String sql = "SELECT Users.UserId as UserId, FirstName, LastName, Users.GenderId, Gender.Name as GenderName, Users.RoleId, Role.Name as RoleName, Username, AvailablePoints, ProfilePicture, Status, EmailContact.EmailId as Email, MobileContact.MobileNumber as MobileNumber FROM Users inner join EmailContact on Users.UserId=EmailContact.UserId inner join Gender on Users.GenderId=Gender.GenderId inner join Role on Users.RoleId=Role.RoleId inner join MobileContact on Users.UserId=MobileContact.UserId ORDER BY Users.UserId";
 		return jdbcTemplate.query(sql, new UserResponseRowMapper());
 	}
 
 	@Override
 	public UserResponse findUserByUserId(int userId) throws Exception {
 //		System.out.println("Repo userId : " + userId);
-		String sql = "SELECT User.UserId as UserId, FirstName, LastName, User.GenderId, Gender.Name as GenderName, User.RoleId, Role.Name as RoleName, Username, AvailablePoints, ProfilePicture, Status, EmailContact.EmailId as Email, MobileContact.MobileNumber as MobileNumber FROM User inner join EmailContact on User.UserId=EmailContact.UserId inner join Gender on User.GenderId=Gender.GenderId inner join Role on User.RoleId=Role.RoleId inner join MobileContact on User.UserId=MobileContact.UserId WHERE User.UserId = :userId";
+		String sql = "SELECT Users.UserId as UserId, FirstName, LastName, Users.GenderId, Gender.Name as GenderName, Users.RoleId, Role.Name as RoleName, Username, AvailablePoints, ProfilePicture, Status, EmailContact.EmailId as Email, MobileContact.MobileNumber as MobileNumber FROM Users inner join EmailContact on Users.UserId=EmailContact.UserId inner join Gender on Users.GenderId=Gender.GenderId inner join Role on Users.RoleId=Role.RoleId inner join MobileContact on Users.UserId=MobileContact.UserId WHERE Users.UserId = :userId";
 		MapSqlParameterSource params = new MapSqlParameterSource("userId", userId);
 		List<UserResponse> userList = jdbcTemplate.query(sql, params, new UserResponseRowMapper());
 //		System.out.println("userList Size : " + userList.size());
@@ -51,7 +51,7 @@ public class UserRepoImpl implements UserRepository {
 
 	@Override
 	public UserWithPassword findUserWithPasswordByUserId(int userId) throws Exception {
-		String sql = "SELECT Username, Password, r.Name as Role FROM User as u INNER JOIN Role as r on u.RoleId=r.RoleId WHERE UserId= :userId";
+		String sql = "SELECT Username, Password, r.Name as Role FROM Users as u INNER JOIN Role as r on u.RoleId=r.RoleId WHERE UserId= :userId";
 		MapSqlParameterSource params = new MapSqlParameterSource("userId", userId);
 		List<UserWithPassword> userList = jdbcTemplate.query(sql, params, new UserWithPasswordRowMapper());
 		if(userList.size() > 0){
@@ -62,14 +62,14 @@ public class UserRepoImpl implements UserRepository {
 
 	@Override
 	public List<UserResponse> findAllUsersByRole(int roleId) throws Exception {
-		String sql = "SELECT User.UserId as UserId, FirstName, LastName, User.GenderId, Gender.Name as GenderName, User.RoleId, Role.Name as RoleName, Username, AvailablePoints, ProfilePicture, Status, EmailContact.EmailId as Email, MobileContact.MobileNumber as MobileNumber FROM User inner join EmailContact on User.UserId=EmailContact.UserId inner join Gender on User.GenderId=Gender.GenderId inner join Role on User.RoleId=Role.RoleId inner join MobileContact on User.UserId=MobileContact.UserId WHERE RoleId= :roleId ORDER BY User.UserId";
+		String sql = "SELECT Users.UserId as UserId, FirstName, LastName, Users.GenderId, Gender.Name as GenderName, Users.RoleId, Role.Name as RoleName, Username, AvailablePoints, ProfilePicture, Status, EmailContact.EmailId as Email, MobileContact.MobileNumber as MobileNumber FROM Users inner join EmailContact on Users.UserId=EmailContact.UserId inner join Gender on Users.GenderId=Gender.GenderId inner join Role on Users.RoleId=Role.RoleId inner join MobileContact on Users.UserId=MobileContact.UserId WHERE RoleId= :roleId ORDER BY Users.UserId";
 		MapSqlParameterSource params = new MapSqlParameterSource("roleId", roleId);
 		return jdbcTemplate.query(sql, params, new UserResponseRowMapper());
 	}
 
 	@Override
 	public UserResponse findUserByEmailIdAndMobileNumber(User user) throws Exception {
-		String sql = "SELECT User.UserId as UserId, FirstName, LastName, User.GenderId, Gender.Name as GenderName, User.RoleId, Role.Name as RoleName, Username, AvailablePoints, ProfilePicture, Status, EmailContact.EmailId as Email, MobileContact.MobileNumber as MobileNumber FROM User inner join EmailContact on User.UserId=EmailContact.UserId inner join Gender on User.GenderId=Gender.GenderId inner join Role on User.RoleId=Role.RoleId inner join MobileContact on User.UserId=MobileContact.UserId WHERE EmailContact.EmailId = :emailId AND MobileContact.MobileNumber = :mobileNumber";
+		String sql = "SELECT Users.UserId as UserId, FirstName, LastName, Users.GenderId, Gender.Name as GenderName, Users.RoleId, Role.Name as RoleName, Username, AvailablePoints, ProfilePicture, Status, EmailContact.EmailId as Email, MobileContact.MobileNumber as MobileNumber FROM Users inner join EmailContact on Users.UserId=EmailContact.UserId inner join Gender on Users.GenderId=Gender.GenderId inner join Role on Users.RoleId=Role.RoleId inner join MobileContact on Users.UserId=MobileContact.UserId WHERE EmailContact.EmailId = :emailId AND MobileContact.MobileNumber = :mobileNumber";
 		MapSqlParameterSource params = new MapSqlParameterSource("emailId", user.getEmail());
 		params.addValue("mobileNumber", user.getMobileNumber());
 		List<UserResponse> userList = jdbcTemplate.query(sql, params, new UserResponseRowMapper());
@@ -82,7 +82,7 @@ public class UserRepoImpl implements UserRepository {
 
 	@Override
 	public List<UserResponse> findUsersByStatus(boolean status) throws Exception {
-		String sql = "SELECT User.UserId as UserId, FirstName, LastName, User.GenderId, Gender.Name as GenderName, User.RoleId, Role.Name as RoleName, Username, AvailablePoints, ProfilePicture, Status, EmailContact.EmailId as Email, MobileContact.MobileNumber as MobileNumber FROM User inner join EmailContact on User.UserId=EmailContact.UserId inner join Gender on User.GenderId=Gender.GenderId inner join Role on User.RoleId=Role.RoleId inner join MobileContact on User.UserId=MobileContact.UserId WHERE User.Status = :status ORDER BY User.UserId";
+		String sql = "SELECT Users.UserId as UserId, FirstName, LastName, Users.GenderId, Gender.Name as GenderName, Users.RoleId, Role.Name as RoleName, Username, AvailablePoints, ProfilePicture, Status, EmailContact.EmailId as Email, MobileContact.MobileNumber as MobileNumber FROM Users inner join EmailContact on Users.UserId=EmailContact.UserId inner join Gender on Users.GenderId=Gender.GenderId inner join Role on Users.RoleId=Role.RoleId inner join MobileContact on Users.UserId=MobileContact.UserId WHERE Users.Status = :status ORDER BY Users.UserId";
 		MapSqlParameterSource params = new MapSqlParameterSource("status", status);
 		return jdbcTemplate.query(sql, params, new UserResponseRowMapper());
 	}
@@ -136,7 +136,7 @@ public class UserRepoImpl implements UserRepository {
 
 	@Override
 	public UserWithPassword findUserByUserName(String username) throws Exception {
-		String sql = "SELECT u.UserName as UserName,u.Password as Password,r.Name as Role FROM User as u INNER JOIN Role as r on u.RoleId=r.RoleId WHERE UserName = :username";
+		String sql = "SELECT u.UserName as UserName,u.Password as Password,r.Name as Role FROM Users as u INNER JOIN Role as r on u.RoleId=r.RoleId WHERE UserName = :username";
 		MapSqlParameterSource params = new MapSqlParameterSource("username", username);
 		List<UserWithPassword> userList = jdbcTemplate.query(sql, params, new UserWithPasswordRowMapper());
 		if(userList.size() > 0){
@@ -153,9 +153,9 @@ public class UserRepoImpl implements UserRepository {
 
 	@Override
 	public UserForLoginState authenticate(UserAtLogin userAtLogin) throws Exception {
-//		String sql = "select u.UserId, u.UserName, r.Name, u.Status from User as u inner join Role as r on u.RoleId = r.RoleId where u.UserName=:username";
-		String sql = "SELECT u.UserId AS UserId, Username, r.Name AS Role, Status from User as u inner join Role as r on u.RoleId = r.RoleId where Username=:username";
-//		String sql = "SELECT u.UserId AS UserId, Username, r.Name AS Role, Status from User as u inner join Role as r on u.RoleId = r.RoleId where u.UserName=:username and u.Password=:password";
+//		String sql = "select u.UserId, u.UserName, r.Name, u.Status from Users as u inner join Role as r on u.RoleId = r.RoleId where u.UserName=:username";
+		String sql = "SELECT u.UserId AS UserId, Username, r.Name AS Role, Status from Users as u inner join Role as r on u.RoleId = r.RoleId where Username=:username";
+//		String sql = "SELECT u.UserId AS UserId, Username, r.Name AS Role, Status from Users as u inner join Role as r on u.RoleId = r.RoleId where u.UserName=:username and u.Password=:password";
 
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, new BeanPropertySqlParameterSource(userAtLogin));
 //		System.out.println("List size : " + list.size());
@@ -174,7 +174,7 @@ public class UserRepoImpl implements UserRepository {
 	@Override
 	public int addUser(UserWithPassword userWithPassword) throws Exception {
 		KeyHolder holder = new GeneratedKeyHolder();
-		String sql = "INSERT INTO User (FirstName,LastName,GenderId,Username,Password,ProfilePicture,RoleId,AvailablePoints,Status)"
+		String sql = "INSERT INTO Users (FirstName,LastName,GenderId,Username,Password,ProfilePicture,RoleId,AvailablePoints,Status)"
 				+ "values(:firstName,:lastName,:genderId,:Username,:password,:profilePicture,:roleId,:availablePoints,:status)";
 		int n = jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(userWithPassword), holder);
 		if(n > 0){
@@ -190,23 +190,23 @@ public class UserRepoImpl implements UserRepository {
 
 	@Override
 	public boolean updateUser(int userId, User user) throws Exception {
-//		String sql = "UPDATE User SET FirstName = :firstName, LastName = :lastName, GenderId = :genderId, Username = :username WHERE UserId=:userId";
-		String sql = "UPDATE User SET FirstName = :firstName, LastName = :lastName, GenderId = :genderId WHERE UserId=:userId";
+//		String sql = "UPDATE Users SET FirstName = :firstName, LastName = :lastName, GenderId = :genderId, Username = :username WHERE UserId=:userId";
+		String sql = "UPDATE Users SET FirstName = :firstName, LastName = :lastName, GenderId = :genderId WHERE UserId=:userId";
 		user.setUserId(userId);
 		return jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(user)) > 0;
 	}
 
 	@Override
 	public boolean updateUserWithProfilePicture(int userId, User user) throws Exception {
-//		String sql = "UPDATE User SET FirstName = :firstName, LastName = :lastName, GenderId = :genderId, Username = :username, ProfilePicture = :profilePicture WHERE UserId=:userId";
-		String sql = "UPDATE User SET FirstName = :firstName, LastName = :lastName, GenderId = :genderId, ProfilePicture = :profilePicture WHERE UserId=:userId";
+//		String sql = "UPDATE Users SET FirstName = :firstName, LastName = :lastName, GenderId = :genderId, Username = :username, ProfilePicture = :profilePicture WHERE UserId=:userId";
+		String sql = "UPDATE Users SET FirstName = :firstName, LastName = :lastName, GenderId = :genderId, ProfilePicture = :profilePicture WHERE UserId=:userId";
 		user.setUserId(userId);
 		return jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(user)) > 0;
 	}
 
 	@Override
 	public boolean updateStatus(int userId, boolean status) throws Exception {
-		String sql = "UPDATE User set Status = :status WHERE UserId = :userId";
+		String sql = "UPDATE Users set Status = :status WHERE UserId = :userId";
 		MapSqlParameterSource params = new MapSqlParameterSource("status", status);
 		params.addValue("userId", userId);
 		return jdbcTemplate.update(sql, params) > 0;
@@ -214,7 +214,7 @@ public class UserRepoImpl implements UserRepository {
 
 	@Override
 	public boolean updateUserPassword(UserWithNewPassword userWithNewPassword) throws Exception {
-		String sql = "UPDATE User SET Password = :newPassword WHERE UserId = :userId";
+		String sql = "UPDATE Users SET Password = :newPassword WHERE UserId = :userId";
 		return jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(userWithNewPassword)) > 0;
 	}
 
@@ -222,7 +222,7 @@ public class UserRepoImpl implements UserRepository {
 	public boolean updateForgetPassword(UserWithOtp userWithOtp) throws Exception {
 		System.out.println("Password : " + userWithOtp.getPassword());
 		String encodedPassword = bCryptPasswordEncoder.encode(userWithOtp.getPassword());
-		String sql = "UPDATE User SET Password = :encodedPassword WHERE UserId = :userId";
+		String sql = "UPDATE Users SET Password = :encodedPassword WHERE UserId = :userId";
 		MapSqlParameterSource params = new MapSqlParameterSource("encodedPassword", encodedPassword);
 		params.addValue("userId", userWithOtp.getUserId());
 		return jdbcTemplate.update(sql, params) > 0;
@@ -230,7 +230,7 @@ public class UserRepoImpl implements UserRepository {
 
 	@Override
 	public boolean updateUserRole(int userId, int roleId) throws Exception {
-		String sql = "UPDATE User SET RoleId = :roleId WHERE UserId = :userId";
+		String sql = "UPDATE Users SET RoleId = :roleId WHERE UserId = :userId";
 		MapSqlParameterSource params = new MapSqlParameterSource("roleId", roleId);
 		params.addValue("userId", userId);
 		return jdbcTemplate.update(sql, params) > 0;
@@ -238,7 +238,7 @@ public class UserRepoImpl implements UserRepository {
 
 	@Override
 	public boolean updateUserProfilePicture(int userId, String profilePicture) throws Exception {
-		String sql = "UPDATE User SET ProfilePicture = :profilePicture WHERE UserId = :userId";
+		String sql = "UPDATE Users SET ProfilePicture = :profilePicture WHERE UserId = :userId";
 		MapSqlParameterSource params = new MapSqlParameterSource("profilePicture", profilePicture);
 		params.addValue("userId", userId);
 		return jdbcTemplate.update(sql, params) > 0;
@@ -246,14 +246,14 @@ public class UserRepoImpl implements UserRepository {
 
 	@Override
 	public boolean updateUserAvailablePoints(int userId, int availablePoints) throws Exception {
-		String sql = "UPDATE User SET AvailablePoints = :availablePoints WHERE UserId =:userId";
+		String sql = "UPDATE Users SET AvailablePoints = :availablePoints WHERE UserId =:userId";
 		MapSqlParameterSource params = new MapSqlParameterSource("availablePoints", availablePoints);
 		return jdbcTemplate.update(sql, params) > 0;
 	}
 
 	@Override
 	public boolean addAvailablePoints(int userId, int points) throws Exception {
-		String sql = "UPDATE User SET AvailablePoints = AvailablePoints + :points WHERE UserId = :userId";
+		String sql = "UPDATE Users SET AvailablePoints = AvailablePoints + :points WHERE UserId = :userId";
 		MapSqlParameterSource params = new MapSqlParameterSource("points", points);
 		params.addValue("userId", userId);
 		return jdbcTemplate.update(sql, params) > 0;
@@ -261,7 +261,7 @@ public class UserRepoImpl implements UserRepository {
 
 	@Override
 	public boolean deductAvailablePoints(int userId, int points) throws Exception {
-		String sql = "UPDATE User SET AvailablePoints = AvailablePoints-:points WHERE UserId = :userId";
+		String sql = "UPDATE Users SET AvailablePoints = AvailablePoints-:points WHERE UserId = :userId";
 		MapSqlParameterSource params = new MapSqlParameterSource("points", points);
 		params.addValue("userId", userId);
 		return jdbcTemplate.update(sql, params) > 0;
@@ -271,7 +271,7 @@ public class UserRepoImpl implements UserRepository {
 	public int getUsersCountByUsername(String username) throws Exception {
 		RowCountCallbackHandler countCallback = new RowCountCallbackHandler();
 		MapSqlParameterSource params = new MapSqlParameterSource("username", username);
-		jdbcTemplate.query("SELECT * FROM User WHERE Username= :username", params, countCallback);
+		jdbcTemplate.query("SELECT * FROM Users WHERE Username= :username", params, countCallback);
 		return countCallback.getRowCount();
 	}
 
@@ -281,14 +281,14 @@ public class UserRepoImpl implements UserRepository {
 
 	@Override
 	public boolean deleteUser(int userId) throws Exception {
-		String sql = "DELETE FROM User WHERE UserId = :userId";
+		String sql = "DELETE FROM Users WHERE UserId = :userId";
 		MapSqlParameterSource params = new MapSqlParameterSource("userId", userId);
 		return jdbcTemplate.update(sql, params) > 0;
 	}
 
 	@Override
 	public boolean deleteUserProfilePicture(int userId) throws Exception {
-		String sql = "UPDATE User SET ProfilePicture='' WHERE UserId = :userId";
+		String sql = "UPDATE Users SET ProfilePicture='' WHERE UserId = :userId";
 		MapSqlParameterSource params = new MapSqlParameterSource("userId", userId);
 		return jdbcTemplate.update(sql, params) > 0;
 	}

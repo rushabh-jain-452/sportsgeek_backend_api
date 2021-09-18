@@ -22,9 +22,9 @@ spring:
     driver-class-name: org.postgresql.Driver
   # To connect from localhost
 #  datasource:
-#    url: jdbc:postgres://ec2-44-198-223-154.compute-1.amazonaws.com:5432/ddk66bnt3h693u
-#    username: kjqbaaxaklngzr
-#    password: 9c14c0a610912f4bb9c8b00e4ab8597139fa84b8510590589d6491e1536bda4b
+#    url: jdbc:postgres://ec2-52-45-238-24.compute-1.amazonaws.com:5432/d7a234h2a8j8rn
+#    username: ztizibnqwrzsvu
+#    password: 7ee00bb9f0511dece1ff517cb78990ec8eedebb3e564b922f2615deb61ad84fe
 #    driver-class-name: org.postgresql.Driver
 
   jpa:

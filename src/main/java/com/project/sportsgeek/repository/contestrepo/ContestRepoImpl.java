@@ -51,7 +51,7 @@ public class ContestRepoImpl implements ContestRepository {
     @Override
     public List<ContestWithUser> findAllContestByMatchId(int matchId) throws Exception {
         String sql = "SELECT ContestId, c.UserId as UserId, MatchId, c.TeamId as TeamId, t.ShortName as TeamShortName, FirstName, LastName, Username, ProfilePicture, ContestPoints, WinningPoints " +
-                "FROM Contest as c, User as u, Team as t " +
+                "FROM Contest as c, Users as u, Team as t " +
                 "WHERE c.TeamId=t.TeamId AND c.UserId=u.UserId AND MatchId = :matchId";
         MapSqlParameterSource params = new MapSqlParameterSource("matchId", matchId);
         return jdbcTemplate.query(sql, params, new ContestRowMapper());
