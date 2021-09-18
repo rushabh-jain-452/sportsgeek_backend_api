@@ -56,7 +56,7 @@ public class UserController {
     @PreAuthorize("hasAnyRole('Admin','User')")
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable int userId) throws Exception {
-//        System.out.println("userId : " + userId);
+//        System.out.println("UserController : " + userId);
         Result<UserResponse> userResult = userService.findUserByUserId(userId);
         return new ResponseEntity<>(userResult.getData(), HttpStatus.valueOf(userResult.getCode()));
     }

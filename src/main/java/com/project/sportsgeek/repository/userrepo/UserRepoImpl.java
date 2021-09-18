@@ -37,7 +37,7 @@ public class UserRepoImpl implements UserRepository {
 
 	@Override
 	public UserResponse findUserByUserId(int userId) throws Exception {
-//		System.out.println("Repo userId : " + userId);
+//		System.out.println("UserRepo : " + userId);
 		String sql = "SELECT Users.UserId as UserId, FirstName, LastName, Users.GenderId, Gender.Name as GenderName, Users.RoleId, Role.Name as RoleName, Username, AvailablePoints, ProfilePicture, Status, EmailContact.EmailId as Email, MobileContact.MobileNumber as MobileNumber FROM Users inner join EmailContact on Users.UserId=EmailContact.UserId inner join Gender on Users.GenderId=Gender.GenderId inner join Role on Users.RoleId=Role.RoleId inner join MobileContact on Users.UserId=MobileContact.UserId WHERE Users.UserId = :userId";
 		MapSqlParameterSource params = new MapSqlParameterSource("userId", userId);
 		List<UserResponse> userList = jdbcTemplate.query(sql, params, new UserResponseRowMapper());
@@ -112,20 +112,24 @@ public class UserRepoImpl implements UserRepository {
 			}
 			// No of Winning Matches
 			try{
-				String sql = "SELECT COUNT(*) FROM Contest WHERE UserId=:userId AND WinningPoints > ContestPoints ORDER BY MatchId;";
+//				String sql = "SELECT COUNT(*) FROM Contest WHERE UserId=:userId AND WinningPoints > ContestPoints ORDER BY MatchId";
+				String sql = "SELECT COUNT(*) FROM Contest WHERE UserId=:userId AND WinningPoints > ContestPoints";
 				MapSqlParameterSource params = new MapSqlParameterSource("userId", userId);
 				int n = jdbcTemplate.queryForObject(sql, params, Integer.class);
 				userWinningAndLosingPoints.setNumberOfWinningMatches(n);
 			}catch(Exception ex){
+//				ex.printStackTrace();
 				userWinningAndLosingPoints.setNumberOfWinningMatches(0);
 			}
 			// No of Losing Matches
 			try{
-				String sql = "SELECT COUNT(*) FROM Contest WHERE UserId=:userId AND WinningPoints = 0 ORDER BY MatchId;";
+//				String sql = "SELECT COUNT(*) FROM Contest WHERE UserId=:userId AND WinningPoints = 0 ORDER BY MatchId";
+				String sql = "SELECT COUNT(*) FROM Contest WHERE UserId=:userId AND WinningPoints = 0";
 				MapSqlParameterSource params = new MapSqlParameterSource("userId", userId);
 				int n = jdbcTemplate.queryForObject(sql, params, Integer.class);
 				userWinningAndLosingPoints.setNumberOfLosingMatches(n);
 			}catch(Exception ex){
+//				ex.printStackTrace();
 				userWinningAndLosingPoints.setNumberOfLosingMatches(0);
 			}
 			return userWinningAndLosingPoints;
