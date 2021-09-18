@@ -1,0 +1,61 @@
+@startuml
+header SportsGeek
+title My Matches
+skinparam ParticipantPadding 10
+skinparam BoxPadding 20
+actor User
+box "SportsGeek System"
+ participant sportsGeek
+end box
+box "My Matches Service"
+ participant myMatches
+end box
+box "database"
+    database database
+end box
+User -> sportsGeek: Get User Upcoming Matches
+activate sportsGeek #lightblue
+alt #white Upcoming Matches
+sportsGeek -> "myMatches" : Get Upcoming Matches
+activate myMatches #lightblue
+    myMatches -> "database" : Get Upcoming Matches
+    activate "database" #lightblue
+    "database" --> "myMatches" : <font color=darkblue><b>Response User Upcoming Matches Details
+    deactivate "database"
+    "myMatches" --> "sportsGeek" : <font color=darkblue><b>Response User Upcoming Matches Details
+    deactivate "myMatches"
+    "sportsGeek" --> User : <font color=darkblue><b>Response User Upcoming Matches Details
+deactivate "sportsGeek"
+end alt
+
+User -> sportsGeek: Get User Live Matches Details
+activate sportsGeek #lightblue
+alt #white Live Matches
+sportsGeek -> "myMatches" : Get User Live Matches Details
+activate myMatches #lightblue
+    myMatches -> "database" : Get User Live Matches Details
+    activate "database" #lightblue
+    "database" --> "myMatches" : <font color=darkblue><b>Response User Live Matches Details
+deactivate "database"
+    "myMatches" --> "sportsGeek" : <font color=darkblue><b>Response User Live Matches Details
+   deactivate "myMatches"
+    "sportsGeek" --> User : <font color=darkblue><b>Response User Live Matches Details
+deactivate "sportsGeek"
+end alt
+
+
+User -> sportsGeek: Get User Old Matches Details
+activate sportsGeek #lightblue
+alt #white Old Matches
+sportsGeek -> "myMatches" : Get User Old Matches Details
+activate myMatches #lightblue
+    myMatches -> "database" : Get User Old Matches Details
+    activate "database" #lightblue
+    "database" --> "myMatches" : <font color=darkblue><b>Response User Old Matches Details
+    deactivate "database"
+    "myMatches" --> "sportsGeek" : <font color=darkblue><b>Response User Old Matches Details
+    deactivate "myMatches"
+    "sportsGeek" --> User : <font color=darkblue><b>Response User Old Matches Details
+deactivate "sportsGeek"
+end alt
+@enduml

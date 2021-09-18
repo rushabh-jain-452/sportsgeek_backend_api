@@ -1,0 +1,50 @@
+@startuml
+header SportsGeek
+title Public Chat
+skinparam ParticipantPadding 10
+skinparam BoxPadding 20
+actor User
+box "SportsGeek System"
+ participant sportsGeek
+end box
+box "Public Chat Service"
+ participant publicChat
+end box
+box "database"
+    database database
+end box
+
+User -> "sportsGeek": Get All Messages
+activate "sportsGeek" #lightblue
+alt #white Get All Messages
+    "sportsGeek" -> "publicChat" : Get All Messages
+    activate "publicChat" #lightblue
+    "publicChat" -> "database" : Get All Messages
+        activate "database" #lightblue
+    "database" --> "publicChat" : <font color=darkblue><b> Response messages Details
+deactivate "database"
+"publicChat" --> "sportsGeek" : <font color=darkblue><b> Response messages Details
+deactivate "publicChat"
+"sportsGeek" --> User : <font color=darkblue><b> Response messages Details
+deactivate "sportsGeek"
+end alt
+
+User -> "sportsGeek": Add Chat
+activate sportsGeek #lightblue
+alt #white Add Chat
+"sportsGeek" -> "publicChat" : Add Chat
+activate "publicChat" #lightblue
+    "publicChat" -> "database" : Add Chat
+    activate "database" #lightblue
+    "database" --> "publicChat" : <font color=darkblue><b>Response Chat Added
+"publicChat" --> "sportsGeek" : <font color=darkblue><b>Response Chat Added
+"sportsGeek" --> User : <font color=darkblue><b>Response Chat Added
+else #pink Unable to add chat
+"database" --> "publicChat" : <font color=darkblue><b>Response Unable to add chat
+deactivate "database"
+"publicChat" --> "sportsGeek" : <font color=darkblue><b>Response Unable to add chat
+deactivate "publicChat"
+"sportsGeek" --> User : <font color=darkblue><b>Response Unable to add chat
+deactivate "sportsGeek"
+end alt
+@enduml

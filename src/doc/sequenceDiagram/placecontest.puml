@@ -1,0 +1,149 @@
+@startuml
+header SportsGeek
+title Place Contest
+skinparam ParticipantPadding 10
+skinparam BoxPadding 20
+actor User
+box "SportsGeek System"
+ participant sportsGeek
+end box
+box "Contest Service"
+ participant contest
+end box
+box "database"
+    database database
+end box
+User -> "sportsGeek": Get all Upcoming Matches
+activate sportsGeek #lightblue
+alt #white Get All Matches
+ "sportsGeek" -> "contest" : Get All Upcoming Matches
+activate "contest" #lightblue
+    contest -> "database" : Get All Upcoming Matches
+    activate "database" #lightblue
+    "database" --> "contest" : <font color=darkblue><b>Response Upcoming Matches Details
+deactivate "database"
+"contest" --> "sportsGeek" : <font color=darkblue><b>Response Upcoming Matches Details
+deactivate "contest"
+"sportsGeek" --> User : <font color=darkblue><b>Response Upcoming Matches Details
+deactivate "sportsGeek"
+end alt
+
+User -> "sportsGeek": Get Match Details By Match Id
+activate sportsGeek #lightblue
+alt #white Get Match Details By Match Id
+"sportsGeek" -> "contest" : Get Match Details By Match Id
+activate "contest" #lightblue
+    contest -> "database" : Get Match Details By Match Id
+    activate "database" #lightblue
+    "database" --> "contest" : <font color=darkblue><b>Response Match Details
+"contest" --> "sportsGeek" : <font color=darkblue><b>Response Match Details
+"sportsGeek" --> User : <font color=darkblue><b>Response Match Details
+else #pink Not Found
+"database" --> "contest" : <font color=darkblue><b>Response match Id Not Found
+deactivate "database"
+"contest" --> "sportsGeek" : <font color=darkblue><b>Response match Id Not Found
+deactivate "contest"
+"sportsGeek" --> User : <font color=darkblue><b>Response match Id Not Found
+deactivate "sportsGeek"
+end alt
+
+User -> "sportsGeek": Get User Details By User Id
+activate sportsGeek #lightblue
+alt #white Get User Details By User Id
+"sportsGeek" -> "contest" : Get User Details By User Id
+activate "contest" #lightblue
+    contest -> "database" : Get User Details By User Id
+    activate "database" #lightblue
+    "database" --> "contest" : <font color=darkblue><b>Response User Details
+"contest" --> "sportsGeek" : <font color=darkblue><b>Response User Details
+"sportsGeek" --> User : <font color=darkblue><b>Response User Details
+else #pink Not Found
+"database" --> "contest" : <font color=darkblue><b>Response User Id Not Found
+deactivate "database"
+"contest" --> "sportsGeek" : <font color=darkblue><b>Response User Id Not Found
+deactivate "contest"
+"sportsGeek" --> User : <font color=darkblue><b>Response User Id Not Found
+deactivate "sportsGeek"
+end alt
+
+User -> "sportsGeek": Get the Total Contest Team points By Match Id
+activate sportsGeek #lightblue
+alt #white Get the Total Contest Team points
+"sportsGeek" -> "contest" : Get the Total Contest Team points By Match Id
+activate "contest" #lightblue
+    contest -> "database" : Get the Total Contest Team points By Match Id
+    activate "database" #lightblue
+    "database" --> "contest" : <font color=darkblue><b>Response Contest Details
+"contest" --> "sportsGeek" : <font color=darkblue><b>Response Contest Details
+"sportsGeek" --> User : <font color=darkblue><b>Response Contest Details
+else #pink Not Found
+"database" --> "contest" : <font color=darkblue><b>Response match Id Not Found
+deactivate "database"
+"contest" --> "sportsGeek" : <font color=darkblue><b>Response match Id Not Found
+deactivate "contest"
+"sportsGeek" --> User : <font color=darkblue><b>Response match Id Not Found
+deactivate "sportsGeek"
+end alt
+
+
+User -> "sportsGeek": Add User Contest
+activate sportsGeek #lightblue
+alt #white Add User Contest
+"sportsGeek" -> "contest" : Add User Contest
+activate "contest" #lightblue
+    contest -> "database" : Add User Contest
+    activate "database" #lightblue
+    "database" --> "contest" : <font color=darkblue><b>Response Contest Added
+"contest" --> "sportsGeek" : <font color=darkblue><b>Response Contest Added
+"sportsGeek" --> User : <font color=darkblue><b>Response Contest Added
+else #pink Unable to Add Contest
+"database" --> "contest" : <font color=darkblue><b>Response Unable to Add Contest
+deactivate "database"
+"contest" --> "sportsGeek" : <font color=darkblue><b>Response Unable to Add Contest
+deactivate "contest"
+"sportsGeek" --> User : <font color=darkblue><b>Response Unable to Add Contest
+deactivate "sportsGeek"
+end alt
+
+User -> "sportsGeek": Get User Contest Details
+activate sportsGeek #lightblue
+alt #white Get User Contest Details
+"sportsGeek" -> "contest" : Get User Contest Details
+activate "contest" #lightblue
+    contest -> "database" : Get User Contest Details
+    activate "database" #lightblue
+    "database" --> "contest" : <font color=darkblue><b>Response Contest Details
+"contest" --> "sportsGeek" : <font color=darkblue><b>Response Contest Details
+"sportsGeek" --> User : <font color=darkblue><b>Response Contest Details
+else #pink MatchId Not Found
+"database" --> "contest" : <font color=darkblue><b>Response match Id Not Found
+deactivate "database"
+"contest" --> "sportsGeek" : <font color=darkblue><b>Response match Id Not Found
+deactivate "contest"
+"sportsGeek" --> User : <font color=darkblue><b>Response match Id Not Found
+deactivate "sportsGeek"
+end alt
+
+User -> "sportsGeek": Update User Contest
+activate sportsGeek #lightblue
+alt #white Update User Contest
+"sportsGeek" -> "contest" : Update User Contest
+activate "contest" #lightblue
+    contest -> "database" : Update User Contest
+    activate "database" #lightblue
+    "database" --> "contest" : <font color=darkblue><b>Response Contest Updated
+"contest" --> "sportsGeek" : <font color=darkblue><b>Response Contest Updated
+"sportsGeek" --> User : <font color=darkblue><b>Response Contest Updated
+else #pink contestId Not Found
+"database" --> "contest" : <font color=darkblue><b>Response contest Id Not Found
+"contest" --> "sportsGeek" : <font color=darkblue><b>Response contest Id Not Found
+"sportsGeek" --> User : <font color=darkblue><b>Response contest Id Not Found
+else #pink Unable to Add Contest
+"database" --> "contest" : <font color=darkblue><b>Response Unable to Update Contest
+deactivate "database"
+"contest" --> "sportsGeek" : <font color=darkblue><b>Response Unable to Update Contest
+deactivate "contest"
+"sportsGeek" --> User : <font color=darkblue><b>Response Unable to Update Contest
+deactivate "sportsGeek"
+end alt
+@enduml

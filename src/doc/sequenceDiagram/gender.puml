@@ -1,0 +1,125 @@
+@startuml
+header SportsGeek
+title Gender CRUD
+skinparam ParticipantPadding 10
+skinparam BoxPadding 20
+actor Admin
+box "SportsGeek System"
+ participant sportsGeek
+end box
+box "Gender Service"
+ participant gender
+end box
+box "database"
+    database database
+end box
+
+Admin -> sportsGeek: Get all Gender Details
+activate "sportsGeek" #lightblue
+alt #white Get All genders
+    sportsGeek -> "gender" : Get All genders
+    activate gender #lightblue
+    "gender" -> "database" : Get All genders
+    activate "database" #lightblue
+    "database" --> "gender" : <font color=darkblue><b>Response Get All Gender Details
+    deactivate "database"
+    "gender" --> "sportsGeek" : <font color=darkblue><b> Response Get All Gender Details
+    deactivate "gender"
+"sportsGeek" --> Admin : <font color=darkblue><b> Response Gender Details
+deactivate "sportsGeek"
+end alt
+
+Admin -> "sportsGeek": Get Gender Detail By Id
+activate "sportsGeek" #lightblue
+alt #white Get gender By Id
+note right #yellow
+        *params*
+        genderId=123
+        end note
+    "sportsGeek" -> "gender" : Get gender By Id
+    activate gender #lightblue
+    "gender" -> "database" : Get gender By Id
+        activate "database" #lightblue
+    "database" --> "gender" : <font color=darkblue><b> Response Gender Details
+"gender" --> "sportsGeek" : <font color=darkblue><b> Response Gender Details
+"sportsGeek" --> Admin : <font color=darkblue><b> Response Gender Details
+else #pink Not Found
+      "database" --> "gender" : <font color=darkblue><b>Response Gender Id Not Found
+deactivate "database"
+"gender" --> "sportsGeek" : <font color=darkblue><b>Response Gender Id Not Found
+deactivate "gender"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response Gender Id Not Found
+deactivate "sportsGeek"
+end alt
+
+
+Admin -> "sportsGeek": Add Gender Details
+activate "sportsGeek" #lightblue
+note right #yellow
+        *params*
+        name=xyz
+        end note
+alt #white Add genders
+    "sportsGeek" -> "gender" : Add gender Details
+    activate gender #lightblue
+    gender -> "database" : Add gender Details
+    activate "database" #lightblue
+    "database" --> "gender" : <font color=darkblue><b>Response Gender Added Successfully
+"gender" --> "sportsGeek" : <font color=darkblue><b> Response Gender Added Successfully
+"sportsGeek" --> Admin : <font color=darkblue><b>Response Gender Added Successfully
+else #pink Unable to Add gender
+"database" --> "gender" : <font color=darkblue><b>Response Unable to add gender
+deactivate "database"
+"gender" --> "sportsGeek" : <font color=darkblue><b>Response Unable to add gender
+deactivate "gender"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response Unable to add gender
+deactivate "sportsGeek"
+end alt
+
+Admin -> "sportsGeek": Update Gender Details
+activate "sportsGeek" #lightblue
+note right #yellow
+        *params*
+        genderId=1
+        name=xyz
+        end note
+alt #white Update gender
+    "sportsGeek" -> "gender" : Update gender
+    activate gender #lightblue
+    gender -> "database" : Update gender
+    activate "database" #lightblue
+    "database" --> "gender" : <font color=darkblue><b>Response Gender Updated Successfully
+"gender" --> "sportsGeek" : <font color=darkblue><b>Response Gender Updated Successfully
+"sportsGeek" --> Admin : <font color=darkblue><b> Response Gender Updated Successfully
+else #pink Not Found
+"database" --> "gender" : <font color=darkblue><b>Response Gender Id not found
+deactivate "database"
+"gender" --> "sportsGeek" : <font color=darkblue><b>Response gender Id not found
+deactivate "gender"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response gender Id not found
+deactivate "sportsGeek"
+end alt
+
+Admin -> "sportsGeek": Delete Gender
+activate "sportsGeek" #lightblue
+note right #yellow
+        *params*
+        genderId=1
+        end note
+alt #white Delete gender
+    "sportsGeek" -> "gender" : Delete gender
+    activate gender #lightblue
+    gender -> "database" : Delete gender
+    activate "database" #lightblue
+    "database" --> "gender" : <font color=darkblue><b>Response Gender Deleted Successfully
+"gender" --> "sportsGeek" : <font color=darkblue><b>Response Gender Deleted Successfully
+"sportsGeek" --> Admin : <font color=darkblue><b>Response Gender Deleted Successfully
+else #pink Not Found
+"database" --> "gender" : <font color=darkblue><b>Response gender Id not found
+deactivate "database"
+"gender" --> "sportsGeek" : <font color=darkblue><b>Response gender Id not found
+deactivate "gender"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response gender Id not found
+deactivate "sportsGeek"
+end alt
+@enduml

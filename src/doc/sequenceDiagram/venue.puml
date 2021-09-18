@@ -1,0 +1,125 @@
+@startuml
+header SportsGeek
+title venue CRUD
+skinparam ParticipantPadding 10
+skinparam BoxPadding 20
+actor Admin
+box "SportsGeek System"
+ participant sportsGeek
+end box
+box "Venue Service"
+ participant venue
+end box
+box "database"
+    database database
+end box
+
+Admin -> sportsGeek: Get all venue Details
+activate "sportsGeek" #lightblue
+alt #white Get All venues
+    sportsGeek -> "venue" : Get All venues
+    activate venue #lightblue
+    "venue" -> "database" : Get All venues
+    activate "database" #lightblue
+    "database" --> "venue" : <font color=darkblue><b>Response Get All venue Details
+    deactivate "database"
+    "venue" --> "sportsGeek" : <font color=darkblue><b> Response Get All venue Details
+deactivate "venue"
+"sportsGeek" --> Admin : <font color=darkblue><b> Response venue Details
+deactivate "sportsGeek"
+end alt
+
+Admin -> "sportsGeek": Get venue Detail By Id
+activate "sportsGeek" #lightblue
+alt #white Get venue By Id
+note right #yellow
+        *params*
+        venueId=123
+        end note
+    "sportsGeek" -> "venue" : Get venue By Id
+    activate venue #lightblue
+    "venue" -> "database" : Get venue By Id
+        activate "database" #lightblue
+    "database" --> "venue" : <font color=darkblue><b> Response venue Details
+"venue" --> "sportsGeek" : <font color=darkblue><b> Response venue Details
+"sportsGeek" --> Admin : <font color=darkblue><b> Response venue Details
+else #pink Not Found
+      "database" --> "venue" : <font color=darkblue><b>Response venue Id Not Found
+deactivate "database"
+"venue" --> "sportsGeek" : <font color=darkblue><b>Response venue Id Not Found
+deactivate "venue"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response venue Id Not Found
+deactivate "sportsGeek"
+end alt
+
+
+Admin -> "sportsGeek": Add venue Details
+activate "sportsGeek" #lightblue
+note right #yellow
+        *params*
+        name=xyz
+        end note
+alt #white Add venues
+    "sportsGeek" -> "venue" : Add venue Details
+    activate venue #lightblue
+    venue -> "database" : Add venue Details
+    activate "database" #lightblue
+    "database" --> "venue" : <font color=darkblue><b>Response venue Added Successfully
+"venue" --> "sportsGeek" : <font color=darkblue><b> Response venue Added Successfully
+"sportsGeek" --> Admin : <font color=darkblue><b>Response venue Added Successfully
+else #pink Unable to Add venue
+"database" --> "venue" : <font color=darkblue><b>Response Unable to add venue
+deactivate "database"
+"venue" --> "sportsGeek" : <font color=darkblue><b>Response Unable to add venue
+deactivate "venue"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response Unable to add venue
+deactivate "sportsGeek"
+end alt
+
+Admin -> "sportsGeek": Update venue Details
+activate "sportsGeek" #lightblue
+note right #yellow
+        *params*
+        venueId=1
+        name=xyz
+        end note
+alt #white Update venue
+    "sportsGeek" -> "venue" : Update venue
+    activate venue #lightblue
+    venue -> "database" : Update venue
+    activate "database" #lightblue
+    "database" --> "venue" : <font color=darkblue><b>Response venue Updated Successfully
+"venue" --> "sportsGeek" : <font color=darkblue><b>Response venue Updated Successfully
+"sportsGeek" --> Admin : <font color=darkblue><b> Response venue Updated Successfully
+else #pink Not Found
+"database" --> "venue" : <font color=darkblue><b>Response venue Id not found
+deactivate "database"
+"venue" --> "sportsGeek" : <font color=darkblue><b>Response venue Id not found
+deactivate "venue"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response venue Id not found
+deactivate "sportsGeek"
+end alt
+
+Admin -> "sportsGeek": Delete venue
+activate "sportsGeek" #lightblue
+note right #yellow
+        *params*
+        venueId=1
+        end note
+alt #white Delete venue
+    "sportsGeek" -> "venue" : Delete venue
+    activate venue #lightblue
+    venue -> "database" : Delete venue
+    activate "database" #lightblue
+    "database" --> "venue" : <font color=darkblue><b>Response venue Deleted Successfully
+"venue" --> "sportsGeek" : <font color=darkblue><b>Response venue Deleted Successfully
+"sportsGeek" --> Admin : <font color=darkblue><b>Response venue Deleted Successfully
+else #pink Not Found
+"database" --> "venue" : <font color=darkblue><b>Response venue Id not found
+deactivate "database"
+"venue" --> "sportsGeek" : <font color=darkblue><b>Response venue Id not found
+"sportsGeek" --> Admin : <font color=darkblue><b>Response venue Id not found
+deactivate "venue"
+deactivate "sportsGeek"
+end alt
+@enduml

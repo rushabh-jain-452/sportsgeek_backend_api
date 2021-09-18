@@ -1,0 +1,50 @@
+@startuml
+header SportsGeek
+title User Account Approval
+skinparam ParticipantPadding 10
+skinparam BoxPadding 20
+actor User
+box "SportsGeek System"
+ participant sportsGeek
+end box
+box "Account Approval Service"
+ participant accountApproval
+end box
+box "database"
+    database database
+end box
+
+User -> sportsGeek: Get All User Details with Status False
+activate sportsGeek #lightblue
+alt #white User Details
+sportsGeek -> "accountApproval" : Get All User Details with Status False
+activate accountApproval #lightblue
+    accountApproval -> "database" : Get All User Details with Status False
+    activate "database" #lightblue
+    "database" --> "accountApproval" : <font color=darkblue><b>Response Get All User Details
+    deactivate "database"
+    "accountApproval" --> "sportsGeek" : <font color=darkblue><b>Response Get All User Details
+   deactivate "accountApproval"
+    "sportsGeek" --> User : <font color=darkblue><b>Response Get All User Details
+deactivate "sportsGeek"
+end alt
+
+User -> sportsGeek: Update User Status
+activate sportsGeek #lightblue
+alt #white Update User Status
+sportsGeek -> "accountApproval" : Update User Status
+activate accountApproval #lightblue
+    accountApproval -> "database" : Update User Status
+    activate "database" #lightblue
+    "database" --> "accountApproval" : <font color=darkblue><b>Response User Status Updated Successfully
+    "accountApproval" --> "sportsGeek" : <font color=darkblue><b>Response User Status Updated Successfully
+    "sportsGeek" --> User : <font color=darkblue><b>Response User Status Updated Successfully
+else #pink Unable to Add Contest
+"database" --> "accountApproval" : <font color=darkblue><b>Response Unable to Update Status
+deactivate "database"
+"accountApproval" --> "sportsGeek" : <font color=darkblue><b>Response Unable to Update Status
+deactivate "accountApproval"
+"sportsGeek" --> User : <font color=darkblue><b>Response Unable to Update Status
+deactivate "sportsGeek"
+end alt
+@enduml

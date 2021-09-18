@@ -1,0 +1,71 @@
+@startuml
+header SportsGeek
+title Assign Role to User
+skinparam ParticipantPadding 10
+skinparam BoxPadding 20
+actor User
+box "SportsGeek System"
+ participant sportsGeek
+end box
+box "Assign Role Service"
+ participant assignRole
+end box
+box "database"
+    database database
+end box
+
+User -> sportsGeek: Get All User Details
+activate sportsGeek #lightblue
+alt #white User Details
+sportsGeek -> "assignRole" : Get All User Details
+activate assignRole #lightblue
+    assignRole -> "database" : Get All User Details
+    activate "database" #lightblue
+    "database" --> "assignRole" : <font color=darkblue><b>Response Get All User Details
+    deactivate "database"
+    "assignRole" --> "sportsGeek" : <font color=darkblue><b>Response Get All User Details
+    deactivate "assignRole"
+    "sportsGeek" --> User : <font color=darkblue><b>Response Get All User Details
+deactivate "sportsGeek"
+end alt
+
+User -> sportsGeek: Get All Roles
+activate sportsGeek #lightblue
+alt #white Roles
+sportsGeek -> "assignRole" : Get All Roles
+activate assignRole #lightblue
+    assignRole -> "database" : Get All Roles
+    activate "database" #lightblue
+    "database" --> "assignRole" : <font color=darkblue><b>Response Get All Roles
+    deactivate "database"
+    "assignRole" --> "sportsGeek" : <font color=darkblue><b>Response Get All Roles
+   deactivate "assignRole"
+    "sportsGeek" --> User : <font color=darkblue><b>Response Get All Roles
+deactivate "sportsGeek"
+end alt
+
+
+
+User -> sportsGeek: Update User Role
+activate sportsGeek #lightblue
+alt #white Update Role
+sportsGeek -> "assignRole" : Update User Role
+activate assignRole #lightblue
+    assignRole -> "database" : Update User Role
+    activate "database" #lightblue
+    "database" --> "assignRole" : <font color=darkblue><b>Response Role Updated Successfully
+    "assignRole" --> "sportsGeek" : <font color=darkblue><b>Response Role Updated Successfully
+    "sportsGeek" --> User : <font color=darkblue><b>Response Role Updated Successfully
+else #pink User Id Not Found
+"database" --> "assignRole" : <font color=darkblue><b>Response User Id Not Found
+"assignRole" --> "sportsGeek" : <font color=darkblue><b>Response User Id Not Found
+"sportsGeek" --> User : <font color=darkblue><b>Response User Id Not Found
+else #pink Unable to assign role
+"database" --> "assignRole" : <font color=darkblue><b>Response Unable to assign role
+deactivate "database"
+"assignRole" --> "sportsGeek" : <font color=darkblue><b>Response Unable to assign role
+deactivate "assignRole"
+"sportsGeek" --> User : <font color=darkblue><b>Response Unable to assign role
+deactivate "sportsGeek"
+end alt
+@enduml

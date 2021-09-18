@@ -1,0 +1,95 @@
+@startuml
+header SportsGeek
+title Update User Details
+skinparam ParticipantPadding 10
+skinparam BoxPadding 20
+actor User
+box "SportsGeek System"
+ participant sportsGeek
+end box
+box "User Service"
+ participant user
+end box
+box "database"
+    database database
+end box
+User -> sportsGeek: Get User by UserId
+activate sportsGeek #lightblue
+alt #white Update User Details
+sportsGeek -> "user" : Get User Details
+activate user #lightblue
+    user -> "database" : Get User Details
+    activate "database" #lightblue
+    "database" --> "user" : <font color=darkblue><b>Response User Details
+    deactivate "database"
+alt #lightgreen If user Found
+"user" --> sportsGeek : <font color=darkblue><b>Response User Details
+"sportsGeek" --> User : <font color=darkblue><b>Response User Details
+else #pink If User Not Found
+"user" --> "sportsGeek" : <font color=darkblue><b>Response User with UserId not found
+deactivate "user"
+"sportsGeek" --> User : <font color=darkblue><b>Response User with UserId not found
+deactivate "sportsGeek"
+end alt
+
+
+User -> "sportsGeek": Update User Details
+activate sportsGeek #lightblue
+note right #yellow
+    *params*
+    firstName=xyz
+    lastName=pqr
+    genderId=1
+    username=xyz112
+    email=xyz123@gmail.com
+    mobileNumber=9632587410
+    profilePicture=xyz.png
+    end note
+"sportsGeek" -> "user" : Update User Details
+activate user #lightblue
+user -> "database" : Update User Details
+activate "database" #lightblue
+alt #lightgreen Success
+"database" --> "user" : <font color=darkblue><b>Response User Details Updated
+"user" --> "sportsGeek" : <font color=darkblue><b> Response User Details Updated Successfully
+    "sportsGeek" --> User : <font color=darkblue><b> Response User Details Updated Successfully
+else #pink If User Not Found
+"database" --> "user" : <font color=darkblue><b>User with UserId not found
+deactivate "database"
+"user" --> "sportsGeek" : <font color=darkblue><b>Response User with UserId not found
+"sportsGeek" --> User : <font color=darkblue><b>Response User with UserId not found
+else #pink Error
+"user" --> "sportsGeek" : <font color=darkblue><b> Response Unable to upload User Image
+deactivate "user"
+"sportsGeek" --> User : <font color=darkblue><b> Response Unable to upload User Image
+deactivate "sportsGeek"
+end alt
+end alt
+
+User -> "sportsGeek": Update Password
+activate sportsGeek #lightblue
+alt #white Update Password
+note right #yellow
+    *params*
+    userId=1
+    oldPassword=*
+    newPassword=*
+    end note
+    "sportsGeek" -> "user" : Check Old Password
+    activate user #lightblue
+user -> "database" : Check Old Password
+activate "database" #lightblue
+alt #lightgreen If old Password Matched
+"database" --> "user" : <font color=darkblue><b>Password Changed Successfully
+"user" --> "sportsGeek" : <font color=darkblue><b>Response Password Changed Successfully
+    "sportsGeek" --> User : <font color=darkblue><b>Response Password Changed Successfully
+else #pink If Old Password Not Matched
+"database" --> "user" : <font color=darkblue><b>Old Password does not match
+deactivate "database"
+"user" --> "sportsGeek" : <font color=darkblue><b>Response Old Password does not match
+deactivate "user"
+"sportsGeek" --> User : <font color=darkblue><b>Response Old Password does not match
+deactivate "sportsGeek"
+end alt
+end alt
+@enduml

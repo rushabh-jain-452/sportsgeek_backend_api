@@ -1,0 +1,58 @@
+@startuml
+header SportsGeek
+title Live And Result Match User Contest
+skinparam ParticipantPadding 10
+skinparam BoxPadding 20
+actor User
+box "SportsGeek System"
+ participant sportsGeek
+end box
+box "Live and Result User Contest Service"
+ participant userContest
+end box
+box "database"
+    database database
+end box
+
+User -> "sportsGeek": Get matches Detail By Id
+activate "sportsGeek" #lightblue
+alt #white Get matches By Id
+note right #yellow
+        *params*
+        matchId=123
+        end note
+    "sportsGeek" -> "userContest" : Get matches By Id
+    activate "userContest" #lightblue
+    "userContest" -> "database" : Get matches By Id
+        activate "database" #lightblue
+    "database" --> "userContest" : <font color=darkblue><b> Response matches Details
+"userContest" --> "sportsGeek" : <font color=darkblue><b> Response matches Details
+"sportsGeek" --> User : <font color=darkblue><b> Response matches Details
+else #pink Not Found
+      "database" --> "userContest" : <font color=darkblue><b>Response matches Id Not Found
+deactivate "database"
+"userContest" --> "sportsGeek" : <font color=darkblue><b>Response matches Id Not Found
+deactivate "userContest"
+"sportsGeek" --> User : <font color=darkblue><b>Response matches Id Not Found
+deactivate "sportsGeek"
+end alt
+
+User -> "sportsGeek": Get User Contest Details
+activate sportsGeek #lightblue
+alt #white Get User Contest Details
+"sportsGeek" -> "userContest" : Get User Contest Details
+activate "userContest" #lightblue
+    "userContest" -> "database" : Get User Contest Details
+    activate "database" #lightblue
+    "database" --> "userContest" : <font color=darkblue><b>Response Contest Details
+"userContest" --> "sportsGeek" : <font color=darkblue><b>Response Contest Details
+"sportsGeek" --> User : <font color=darkblue><b>Response Contest Details
+else #pink MatchId Not Found
+"database" --> "userContest" : <font color=darkblue><b>Response match Id Not Found
+deactivate "database"
+"userContest" --> "sportsGeek" : <font color=darkblue><b>Response match Id Not Found
+deactivate "userContest"
+"sportsGeek" --> User : <font color=darkblue><b>Response match Id Not Found
+deactivate "sportsGeek"
+end alt
+@enduml

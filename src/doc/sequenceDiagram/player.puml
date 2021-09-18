@@ -1,0 +1,131 @@
+@startuml
+header SportsGeek
+title Player CRUD
+skinparam ParticipantPadding 10
+skinparam BoxPadding 20
+actor Admin
+box "SportsGeek System"
+ participant sportsGeek
+end box
+box "Player Service"
+ participant player
+end box
+box "database"
+    database database
+end box
+
+Admin -> sportsGeek: Get all player Details
+activate "sportsGeek" #lightblue
+alt #white Get All players
+    sportsGeek -> "player" : Get All players
+    activate player #lightblue
+    "player" -> "database" : Get All players
+    activate "database" #lightblue
+    "database" --> "player" : <font color=darkblue><b>Response Get All player Details
+    deactivate "database"
+    "player" --> "sportsGeek" : <font color=darkblue><b> Response Get All player Details
+deactivate "player"
+"sportsGeek" --> Admin : <font color=darkblue><b> Response player Details
+deactivate "sportsGeek"
+end alt
+
+Admin -> "sportsGeek": Get player Detail By Id
+activate "sportsGeek" #lightblue
+alt #white Get player By Id
+note right #yellow
+        *params*
+        playerId=123
+        end note
+    "sportsGeek" -> "player" : Get player By Id
+    activate player #lightblue
+    "player" -> "database" : Get player By Id
+        activate "database" #lightblue
+    "database" --> "player" : <font color=darkblue><b> Response player Details
+"player" --> "sportsGeek" : <font color=darkblue><b> Response player Details
+"sportsGeek" --> Admin : <font color=darkblue><b> Response player Details
+else #pink Not Found
+      "database" --> "player" : <font color=darkblue><b>Response player Id Not Found
+deactivate "database"
+"player" --> "sportsGeek" : <font color=darkblue><b>Response player Id Not Found
+deactivate "player"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response player Id Not Found
+deactivate "sportsGeek"
+end alt
+
+
+Admin -> "sportsGeek": Add player Details
+activate "sportsGeek" #lightblue
+note right #yellow
+        *params*
+        playerName=xyz
+        playerTypeId=1
+        teamId=1
+        profilePicture=xyz.jpg
+        end note
+alt #white Add players
+    "sportsGeek" -> "player" : Add player Details
+    activate player #lightblue
+    player -> "database" : Add player Details
+    activate "database" #lightblue
+    "database" --> "player" : <font color=darkblue><b>Response player Added Successfully
+"player" --> "sportsGeek" : <font color=darkblue><b> Response player Added Successfully
+"sportsGeek" --> Admin : <font color=darkblue><b>Response player Added Successfully
+else #pink Unable to Add player
+"database" --> "player" : <font color=darkblue><b>Response Unable to add player
+deactivate "database"
+"player" --> "sportsGeek" : <font color=darkblue><b>Response Unable to add player
+deactivate "player"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response Unable to add player
+deactivate "sportsGeek"
+end alt
+
+Admin -> "sportsGeek": Update player Details
+activate "sportsGeek" #lightblue
+note right #yellow
+        *params*
+        playerId=1
+         playerName=xyz
+         playerTypeId=1
+         teamId=1
+         profilePicture=xyz.jpg
+        end note
+alt #white Update player
+    "sportsGeek" -> "player" : Update player
+    activate player #lightblue
+    player -> "database" : Update player
+    activate "database" #lightblue
+    "database" --> "player" : <font color=darkblue><b>Response player Updated Successfully
+"player" --> "sportsGeek" : <font color=darkblue><b>Response player Updated Successfully
+"sportsGeek" --> Admin : <font color=darkblue><b> Response player Updated Successfully
+else #pink Not Found
+"database" --> "player" : <font color=darkblue><b>Response player Id not found
+deactivate "database"
+"player" --> "sportsGeek" : <font color=darkblue><b>Response player Id not found
+deactivate "player"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response player Id not found
+deactivate "sportsGeek"
+end alt
+
+Admin -> "sportsGeek": Delete player
+activate "sportsGeek" #lightblue
+note right #yellow
+        *params*
+        playerId=1
+        end note
+alt #white Delete player
+    "sportsGeek" -> "player" : Delete player
+    activate player #lightblue
+    player -> "database" : Delete player
+    activate "database" #lightblue
+    "database" --> "player" : <font color=darkblue><b>Response player Deleted Successfully
+"player" --> "sportsGeek" : <font color=darkblue><b>Response player Deleted Successfully
+"sportsGeek" --> Admin : <font color=darkblue><b>Response player Deleted Successfully
+else #pink Not Found
+"database" --> "player" : <font color=darkblue><b>Response player Id not found
+deactivate "database"
+"player" --> "sportsGeek" : <font color=darkblue><b>Response player Id not found
+deactivate "player"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response player Id not found
+deactivate "sportsGeek"
+end alt
+@enduml

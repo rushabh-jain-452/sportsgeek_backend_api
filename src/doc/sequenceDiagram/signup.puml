@@ -1,0 +1,63 @@
+@startuml
+header SportsGeek
+title Sign Up
+skinparam ParticipantPadding 10
+skinparam BoxPadding 20
+actor User
+box "SportsGeek System"
+ participant sportsGeek
+end box
+box "User Service"
+ participant user
+end box
+box "database"
+    database database
+end box
+box "email service"
+    participant email
+end box
+User -> sportsGeek: Enter the Details to Register
+activate sportsGeek #lightblue
+alt #white
+note right #yellow
+    *params*
+    firstName=xyz
+    lastName=pqr
+    genderId=1
+    username=xyz112
+    password=******
+    email=xyz123@gmail.com
+    mobileNumber=9632587410
+    availablePoints=500
+    profilePicture=xyz.png
+    end note
+    sportsGeek -> "user" : Check user exists
+activate user #lightblue
+    user -> "database" : Check user exists
+    activate "database" #lightblue
+    "database" --> "user" : <font color=darkblue><b>Response not exist user
+    user -> "database" : add user details
+
+alt #lightgreen If user added
+"user" -> email : <font color=darkblue><b>Mail Sent to User
+"database" --> user : <font color=darkblue><b>Response user added
+"user" --> sportsGeek : <font color=darkblue><b>Response User Added
+"sportsGeek" --> User : <font color=darkblue><b>Response User Added
+else #pink UserName Already Exist
+"database" --> "user" : <font color=darkblue><b> User exist
+"user" --> "sportsGeek" : <font color=darkblue><b>Response Username already exist
+"sportsGeek" --> User : <font color=darkblue><b>Response Username already exist
+else #pink Email Already Exist
+"database" --> "user" : <font color=darkblue><b> Email exist
+"user" --> "sportsGeek" : <font color=darkblue><b>Response Email already exist
+"sportsGeek" --> User : <font color=darkblue><b>Response Email already exist
+else #pink Unable to Add User
+"database" --> "user" : <font color=darkblue><b> Unable to Add User
+deactivate "database"
+"user" --> "sportsGeek" : <font color=darkblue><b>Response Unable to Add User
+deactivate "user"
+"sportsGeek" --> User : <font color=darkblue><b>Response Unable to Add User
+deactivate "sportsGeek"
+end alt
+end alt
+@enduml

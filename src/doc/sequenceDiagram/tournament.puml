@@ -1,0 +1,150 @@
+@startuml
+header SportsGeek
+title Tournament CRUD
+skinparam ParticipantPadding 10
+skinparam BoxPadding 20
+actor Admin
+box "SportsGeek System"
+ participant sportsGeek
+end box
+box "Tournament Service"
+ participant tournament
+end box
+box "database"
+    database database
+end box
+
+Admin -> sportsGeek: Get all tournament Details
+activate "sportsGeek" #lightblue
+alt #white Get All tournaments
+    sportsGeek -> "tournament" : Get All tournaments
+    activate tournament #lightblue
+    "tournament" -> "database" : Get All tournaments
+    activate "database" #lightblue
+    "database" --> "tournament" : <font color=darkblue><b>Response Get All tournament Details
+    deactivate "database"
+    "tournament" --> "sportsGeek" : <font color=darkblue><b> Response Get All tournament Details
+deactivate "tournament"
+"sportsGeek" --> Admin : <font color=darkblue><b> Response tournament Details
+deactivate "sportsGeek"
+end alt
+
+Admin -> "sportsGeek": Get tournament Detail By Id
+activate "sportsGeek" #lightblue
+alt #white Get tournament By Id
+note right #yellow
+        *params*
+        tournamentId=123
+        end note
+    "sportsGeek" -> "tournament" : Get tournament By Id
+    activate tournament #lightblue
+    "tournament" -> "database" : Get tournament By Id
+        activate "database" #lightblue
+    "database" --> "tournament" : <font color=darkblue><b> Response tournament Details
+"tournament" --> "sportsGeek" : <font color=darkblue><b> Response tournament Details
+"sportsGeek" --> Admin : <font color=darkblue><b> Response tournament Details
+else #pink Not Found
+      "database" --> "tournament" : <font color=darkblue><b>Response tournament Id Not Found
+deactivate "database"
+"tournament" --> "sportsGeek" : <font color=darkblue><b>Response tournament Id Not Found
+deactivate "tournament"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response tournament Id Not Found
+deactivate "sportsGeek"
+end alt
+
+
+Admin -> "sportsGeek": Add tournament Details
+activate "sportsGeek" #lightblue
+note right #yellow
+        *params*
+        name=xyz
+        end note
+alt #white Add tournaments
+    "sportsGeek" -> "tournament" : Add tournament Details
+    activate tournament #lightblue
+    tournament -> "database" : Add tournament Details
+    activate "database" #lightblue
+    "database" --> "tournament" : <font color=darkblue><b>Response tournament Added Successfully
+"tournament" --> "sportsGeek" : <font color=darkblue><b> Response tournament Added Successfully
+"sportsGeek" --> Admin : <font color=darkblue><b>Response tournament Added Successfully
+else #pink Unable to Add tournament
+"database" --> "tournament" : <font color=darkblue><b>Response Unable to add tournament
+deactivate "database"
+"tournament" --> "sportsGeek" : <font color=darkblue><b>Response Unable to add tournament
+deactivate "tournament"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response Unable to add tournament
+deactivate "sportsGeek"
+end alt
+
+Admin -> "sportsGeek": Update tournament Details
+activate "sportsGeek" #lightblue
+note right #yellow
+        *params*
+        tournamentId=1
+        name=xyz
+        end note
+alt #white Update tournament
+    "sportsGeek" -> "tournament" : Update tournament
+    activate tournament #lightblue
+    tournament -> "database" : Update tournament
+    activate "database" #lightblue
+    "database" --> "tournament" : <font color=darkblue><b>Response tournament Updated Successfully
+"tournament" --> "sportsGeek" : <font color=darkblue><b>Response tournament Updated Successfully
+"sportsGeek" --> Admin : <font color=darkblue><b> Response tournament Updated Successfully
+else #pink Not Found
+"database" --> "tournament" : <font color=darkblue><b>Response tournament Id not found
+deactivate "database"
+"tournament" --> "sportsGeek" : <font color=darkblue><b>Response tournament Id not found
+deactivate "tournament"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response tournament Id not found
+deactivate "sportsGeek"
+end alt
+
+Admin -> "sportsGeek": Update Active Tournament
+activate "sportsGeek" #lightblue
+note right #yellow
+        *params*
+        tournamentId=1
+        status=1
+        end note
+alt #white Update Active Tournament
+    "sportsGeek" -> "tournament" : Update Active Tournament
+    activate tournament #lightblue
+    tournament -> "database" : Update Active Tournament
+    activate "database" #lightblue
+    "database" --> "tournament" : <font color=darkblue><b>Response tournament Updated Successfully
+"tournament" --> "sportsGeek" : <font color=darkblue><b>Response tournament Updated Successfully
+"sportsGeek" --> Admin : <font color=darkblue><b> Response tournament Updated Successfully
+else #pink Not Found
+"database" --> "tournament" : <font color=darkblue><b>Response tournament Id not found
+deactivate "database"
+"tournament" --> "sportsGeek" : <font color=darkblue><b>Response tournament Id not found
+deactivate "tournament"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response tournament Id not found
+deactivate "sportsGeek"
+end alt
+
+
+Admin -> "sportsGeek": Delete tournament
+activate "sportsGeek" #lightblue
+note right #yellow
+        *params*
+        tournamentId=1
+        end note
+alt #white Delete tournament
+    "sportsGeek" -> "tournament" : Delete tournament
+    activate tournament #lightblue
+    tournament -> "database" : Delete tournament
+    activate "database" #lightblue
+    "database" --> "tournament" : <font color=darkblue><b>Response tournament Deleted Successfully
+"tournament" --> "sportsGeek" : <font color=darkblue><b>Response tournament Deleted Successfully
+"sportsGeek" --> Admin : <font color=darkblue><b>Response tournament Deleted Successfully
+else #pink Not Found
+"database" --> "tournament" : <font color=darkblue><b>Response tournament Id not found
+deactivate "database"
+"tournament" --> "sportsGeek" : <font color=darkblue><b>Response tournament Id not found
+deactivate "tournament"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response tournament Id not found
+deactivate "sportsGeek"
+end alt
+@enduml

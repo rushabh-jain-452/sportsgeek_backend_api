@@ -1,0 +1,187 @@
+@startuml
+header SportsGeek
+title Matches CRUD
+skinparam ParticipantPadding 10
+skinparam BoxPadding 20
+actor Admin
+box "SportsGeek System"
+ participant sportsGeek
+end box
+box "Matches Service"
+ participant matches
+end box
+box "database"
+    database database
+end box
+
+Admin -> sportsGeek: Get all matches Details
+activate "sportsGeek" #lightblue
+alt #white Get All matches
+    sportsGeek -> "matches" : Get All matches
+    activate matches #lightblue
+    "matches" -> "database" : Get All matches
+    activate "database" #lightblue
+    "database" --> "matches" : <font color=darkblue><b>Response Get All matches Details
+    deactivate "database"
+    "matches" --> "sportsGeek" : <font color=darkblue><b> Response Get All matches Details
+deactivate "matches"
+"sportsGeek" --> Admin : <font color=darkblue><b> Response matches Details
+deactivate "sportsGeek"
+end alt
+
+Admin -> "sportsGeek": Get matches Detail By Id
+activate "sportsGeek" #lightblue
+alt #white Get matches By Id
+note right #yellow
+        *params*
+        matchId=123
+        end note
+    "sportsGeek" -> "matches" : Get matches By Id
+    activate matches #lightblue
+    "matches" -> "database" : Get matches By Id
+        activate "database" #lightblue
+    "database" --> "matches" : <font color=darkblue><b> Response matches Details
+"matches" --> "sportsGeek" : <font color=darkblue><b> Response matches Details
+"sportsGeek" --> Admin : <font color=darkblue><b> Response matches Details
+else #pink Not Found
+      "database" --> "matches" : <font color=darkblue><b>Response matches Id Not Found
+deactivate "database"
+"matches" --> "sportsGeek" : <font color=darkblue><b>Response matches Id Not Found
+deactivate "matches"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response matches Id Not Found
+deactivate "sportsGeek"
+end alt
+
+
+Admin -> "sportsGeek": Add matches Details
+activate "sportsGeek" #lightblue
+note right #yellow
+        *params*
+        matchId=101
+        tournamentId=1
+        name=XYZ VS PQR
+        startDateTime=12/05/2021
+        venueId=1
+        team1=4
+        team2=5
+        minimumPoints=10
+        end note
+alt #white Add matches
+    "sportsGeek" -> "matches" : Add matches Details
+    activate matches #lightblue
+    matches -> "database" : Add matches Details
+    activate "database" #lightblue
+    "database" --> "matches" : <font color=darkblue><b>Response matches Added Successfully
+"matches" --> "sportsGeek" : <font color=darkblue><b> Response matches Added Successfully
+"sportsGeek" --> Admin : <font color=darkblue><b>Response matches Added Successfully
+else #pink Unable to Add matches
+"database" --> "matches" : <font color=darkblue><b>Response Unable to add matches
+deactivate "database"
+"matches" --> "sportsGeek" : <font color=darkblue><b>Response Unable to add matches
+deactivate "matches"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response Unable to add matches
+deactivate "sportsGeek"
+end alt
+
+Admin -> "sportsGeek": Update matches Details
+activate "sportsGeek" #lightblue
+note right #yellow
+        *params*
+        matchId=101
+        tournamentId=1
+        name=XYZ VS PQR
+        startDateTime=12/05/2021
+        venueId=1
+        team1=4
+        team2=5
+        minimumPoints=10
+        end note
+alt #white Update matches
+    "sportsGeek" -> "matches" : Update matches
+    activate matches #lightblue
+    matches -> "database" : Update matches
+    activate "database" #lightblue
+    "database" --> "matches" : <font color=darkblue><b>Response matches Updated Successfully
+"matches" --> "sportsGeek" : <font color=darkblue><b>Response matches Updated Successfully
+"sportsGeek" --> Admin : <font color=darkblue><b> Response matches Updated Successfully
+else #pink Not Found
+"database" --> "matches" : <font color=darkblue><b>Response matches Id not found
+deactivate "database"
+"matches" --> "sportsGeek" : <font color=darkblue><b>Response matches Id not found
+deactivate "matches"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response matches Id not found
+deactivate "sportsGeek"
+end alt
+
+Admin -> "sportsGeek": Update matches Contest Points
+activate "sportsGeek" #lightblue
+note right #yellow
+        *params*
+        matchId=1
+        minimumPoints=100
+        end note
+alt #white Update matches Contest Points
+    "sportsGeek" -> "matches" : Update matches Contest Points
+    activate matches #lightblue
+    matches -> "database" : Update matches Contest Points
+    activate "database" #lightblue
+    "database" --> "matches" : <font color=darkblue><b>Response matches contest points Updated Successfully
+"matches" --> "sportsGeek" : <font color=darkblue><b>Response matches contest points Updated Successfully
+"sportsGeek" --> Admin : <font color=darkblue><b>Response matches contest points Updated Successfully
+else #pink Not Found
+"database" --> "matches" : <font color=darkblue><b>Response matches Id not found
+deactivate "database"
+"matches" --> "sportsGeek" : <font color=darkblue><b>Response matches Id not found
+deactivate "matches"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response matches Id not found
+deactivate "sportsGeek"
+end alt
+
+Admin -> "sportsGeek": Update Match Result
+activate "sportsGeek" #lightblue
+note right #yellow
+        *params*
+        matchId=1
+        minimumPoints=100
+        end note
+alt #white Update Match Result
+    "sportsGeek" -> "matches" : Update Match Result
+    activate matches #lightblue
+    matches -> "database" : Update Match Result
+    activate "database" #lightblue
+    "database" --> "matches" : <font color=darkblue><b>Response Match Result Updated Successfully
+"matches" --> "sportsGeek" : <font color=darkblue><b>Response Match Result Updated Successfully
+"sportsGeek" --> Admin : <font color=darkblue><b>Response Match Result Updated Successfully
+else #pink Unable to Update Match Result
+"database" --> "matches" : <font color=darkblue><b>Response Unable to Update Match Result
+deactivate "database"
+"matches" --> "sportsGeek" : <font color=darkblue><b>Response Unable to Update Match Result
+deactivate "matches"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response Unable to Update Match Result
+deactivate "sportsGeek"
+end alt
+
+
+Admin -> "sportsGeek": Delete matches
+activate "sportsGeek" #lightblue
+note right #yellow
+        *params*
+        matchId=1
+        end note
+alt #white Delete matches
+    "sportsGeek" -> "matches" : Delete matches
+    activate matches #lightblue
+    matches -> "database" : Delete matches
+    activate "database" #lightblue
+    "database" --> "matches" : <font color=darkblue><b>Response matches Deleted Successfully
+"matches" --> "sportsGeek" : <font color=darkblue><b>Response matches Deleted Successfully
+"sportsGeek" --> Admin : <font color=darkblue><b>Response matches Deleted Successfully
+else #pink Not Found
+"database" --> "matches" : <font color=darkblue><b>Response matches Id not found
+deactivate "database"
+"matches" --> "sportsGeek" : <font color=darkblue><b>Response matches Id not found
+deactivate "matches"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response matches Id not found
+deactivate "sportsGeek"
+end alt
+@enduml

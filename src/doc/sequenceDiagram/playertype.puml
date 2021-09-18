@@ -1,0 +1,125 @@
+@startuml
+header SportsGeek
+title PlayerType CRUD
+skinparam ParticipantPadding 10
+skinparam BoxPadding 20
+actor Admin
+box "SportsGeek System"
+ participant sportsGeek
+end box
+box "Player Type Service"
+ participant playerType
+end box
+box "database"
+    database database
+end box
+
+Admin -> sportsGeek: Get all playerType Details
+activate "sportsGeek" #lightblue
+alt #white Get All playerTypes
+    sportsGeek -> "playerType" : Get All playerTypes
+    activate playerType #lightblue
+    "playerType" -> "database" : Get All playerTypes
+    activate "database" #lightblue
+    "database" --> "playerType" : <font color=darkblue><b>Response Get All playerType Details
+   deactivate "database"
+    "playerType" --> "sportsGeek" : <font color=darkblue><b> Response Get All playerType Details
+deactivate "playerType"
+"sportsGeek" --> Admin : <font color=darkblue><b> Response playerType Details
+deactivate "sportsGeek"
+end alt
+
+Admin -> "sportsGeek": Get playerType Detail By Id
+activate "sportsGeek" #lightblue
+alt #white Get playerType By Id
+note right #yellow
+        *params*
+        playerTypeId=123
+        end note
+    "sportsGeek" -> "playerType" : Get playerType By Id
+    activate playerType #lightblue
+    "playerType" -> "database" : Get playerType By Id
+        activate "database" #lightblue
+    "database" --> "playerType" : <font color=darkblue><b> Response playerType Details
+"playerType" --> "sportsGeek" : <font color=darkblue><b> Response playerType Details
+"sportsGeek" --> Admin : <font color=darkblue><b> Response playerType Details
+else #pink Not Found
+      "database" --> "playerType" : <font color=darkblue><b>Response playerType Id Not Found
+deactivate "database"
+"playerType" --> "sportsGeek" : <font color=darkblue><b>Response playerType Id Not Found
+deactivate "playerType"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response playerType Id Not Found
+deactivate "sportsGeek"
+end alt
+
+
+Admin -> "sportsGeek": Add playerType Details
+activate "sportsGeek" #lightblue
+note right #yellow
+        *params*
+        typeName=xyz
+        end note
+alt #white Add playerTypes
+    "sportsGeek" -> "playerType" : Add playerType Details
+    activate playerType #lightblue
+    playerType -> "database" : Add playerType Details
+    activate "database" #lightblue
+    "database" --> "playerType" : <font color=darkblue><b>Response playerType Added Successfully
+"playerType" --> "sportsGeek" : <font color=darkblue><b> Response playerType Added Successfully
+"sportsGeek" --> Admin : <font color=darkblue><b>Response playerType Added Successfully
+else #pink Unable to Add playerType
+"database" --> "playerType" : <font color=darkblue><b>Response Unable to add playerType
+deactivate "database"
+"playerType" --> "sportsGeek" : <font color=darkblue><b>Response Unable to add playerType
+deactivate "playerType"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response Unable to add playerType
+deactivate "sportsGeek"
+end alt
+
+Admin -> "sportsGeek": Update playerType Details
+activate "sportsGeek" #lightblue
+note right #yellow
+        *params*
+        playerTypeId=1
+        typeName=xyz
+        end note
+alt #white Update playerType
+    "sportsGeek" -> "playerType" : Update playerType
+    activate playerType #lightblue
+    playerType -> "database" : Update playerType
+    activate "database" #lightblue
+    "database" --> "playerType" : <font color=darkblue><b>Response playerType Updated Successfully
+"playerType" --> "sportsGeek" : <font color=darkblue><b>Response playerType Updated Successfully
+"sportsGeek" --> Admin : <font color=darkblue><b> Response playerType Updated Successfully
+else #pink Not Found
+"database" --> "playerType" : <font color=darkblue><b>Response playerType Id not found
+deactivate "database"
+"playerType" --> "sportsGeek" : <font color=darkblue><b>Response playerType Id not found
+deactivate "playerType"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response playerType Id not found
+deactivate "sportsGeek"
+end alt
+
+Admin -> "sportsGeek": Delete playerType
+activate "sportsGeek" #lightblue
+note right #yellow
+        *params*
+        playerTypeId=1
+        end note
+alt #white Delete playerType
+    "sportsGeek" -> "playerType" : Delete playerType
+    activate playerType #lightblue
+    playerType -> "database" : Delete playerType
+    activate "database" #lightblue
+    "database" --> "playerType" : <font color=darkblue><b>Response playerType Deleted Successfully
+"playerType" --> "sportsGeek" : <font color=darkblue><b>Response playerType Deleted Successfully
+"sportsGeek" --> Admin : <font color=darkblue><b>Response playerType Deleted Successfully
+else #pink Not Found
+"database" --> "playerType" : <font color=darkblue><b>Response playerType Id not found
+deactivate "database"
+"playerType" --> "sportsGeek" : <font color=darkblue><b>Response playerType Id not found
+deactivate "playerType"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response playerType Id not found
+deactivate "sportsGeek"
+end alt
+@enduml

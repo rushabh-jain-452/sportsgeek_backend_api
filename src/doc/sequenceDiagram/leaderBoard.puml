@@ -1,0 +1,46 @@
+@startuml
+header SportsGeek
+title LeaderBoard
+skinparam ParticipantPadding 10
+skinparam BoxPadding 20
+actor User
+box "SportsGeek System"
+ participant sportsGeek
+end box
+box "Statistics Service"
+ participant Statistics
+end box
+box "database"
+    database database
+end box
+
+User -> sportsGeek: Get All User Statistics
+activate sportsGeek #lightblue
+alt #white
+sportsGeek -> "Statistics" : Get Users Statistics
+activate Statistics #lightblue
+    Statistics -> "database" : Get Users Statistics
+    activate "database" #lightblue
+    "database" --> "Statistics" : <font color=darkblue><b>Response Users Statistics Details
+deactivate "database"
+"Statistics" --> sportsGeek : <font color=darkblue><b>Response Users Statistics Details
+deactivate "Statistics"
+"sportsGeek" --> User : <font color=darkblue><b>Response Users Statistics Details
+deactivate "sportsGeek"
+end alt
+
+User -> sportsGeek: Get All Users Future Contest
+activate sportsGeek #lightblue
+alt #white
+sportsGeek -> "Statistics" : Get Users Future Contest Points
+activate Statistics #lightblue
+    Statistics -> "database" : Get Users Future Contest Points
+    activate "database" #lightblue
+    "database" --> "Statistics" : <font color=darkblue><b>Response Users Future Contest Points Details
+deactivate "database"
+"Statistics" --> sportsGeek : <font color=darkblue><b>Response Users Future Contest Points Details
+deactivate "Statistics"
+"sportsGeek" --> User : <font color=darkblue><b>Response Users Future Contest Points Details
+deactivate "sportsGeek"
+end alt
+@enduml

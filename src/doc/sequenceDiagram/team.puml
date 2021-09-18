@@ -1,0 +1,129 @@
+@startuml
+header SportsGeek
+title Team CRUD
+skinparam ParticipantPadding 10
+skinparam BoxPadding 20
+actor Admin
+box "SportsGeek System"
+ participant sportsGeek
+end box
+box "Team Service"
+ participant team
+end box
+box "database"
+    database database
+end box
+
+Admin -> sportsGeek: Get all team Details
+activate "sportsGeek" #lightblue
+alt #white Get All teams
+    sportsGeek -> "team" : Get All teams
+    activate team #lightblue
+    "team" -> "database" : Get All teams
+    activate "database" #lightblue
+    "database" --> "team" : <font color=darkblue><b>Response Get All team Details
+    deactivate "database"
+    "team" --> "sportsGeek" : <font color=darkblue><b> Response Get All team Details
+deactivate "team"
+"sportsGeek" --> Admin : <font color=darkblue><b> Response team Details
+deactivate "sportsGeek"
+end alt
+
+Admin -> "sportsGeek": Get team Detail By Id
+activate "sportsGeek" #lightblue
+alt #white Get team By Id
+note right #yellow
+        *params*
+        teamId=123
+        end note
+    "sportsGeek" -> "team" : Get team By Id
+    activate team #lightblue
+    "team" -> "database" : Get team By Id
+        activate "database" #lightblue
+    "database" --> "team" : <font color=darkblue><b> Response team Details
+"team" --> "sportsGeek" : <font color=darkblue><b> Response team Details
+"sportsGeek" --> Admin : <font color=darkblue><b> Response team Details
+else #pink Not Found
+      "database" --> "team" : <font color=darkblue><b>Response team Id Not Found
+deactivate "database"
+"team" --> "sportsGeek" : <font color=darkblue><b>Response team Id Not Found
+deactivate "team"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response team Id Not Found
+deactivate "sportsGeek"
+end alt
+
+
+Admin -> "sportsGeek": Add team Details
+activate "sportsGeek" #lightblue
+note right #yellow
+        *params*
+        name=xyz
+        shortName=xyz
+        teamLogo=xyz.jpg
+        end note
+alt #white Add teams
+    "sportsGeek" -> "team" : Add team Details
+    activate team #lightblue
+    team -> "database" : Add team Details
+    activate "database" #lightblue
+    "database" --> "team" : <font color=darkblue><b>Response team Added Successfully
+"team" --> "sportsGeek" : <font color=darkblue><b> Response team Added Successfully
+"sportsGeek" --> Admin : <font color=darkblue><b>Response team Added Successfully
+else #pink Unable to Add team
+"database" --> "team" : <font color=darkblue><b>Response Unable to add team
+deactivate "database"
+"team" --> "sportsGeek" : <font color=darkblue><b>Response Unable to add team
+deactivate "team"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response Unable to add team
+deactivate "sportsGeek"
+end alt
+
+Admin -> "sportsGeek": Update team Details
+activate "sportsGeek" #lightblue
+note right #yellow
+        *params*
+         teamId=1
+         name=xyz
+         shortName=xyz
+         teamLogo=xyz.jpg
+        end note
+alt #white Update team
+    "sportsGeek" -> "team" : Update team
+    activate team #lightblue
+    team -> "database" : Update team
+    activate "database" #lightblue
+    "database" --> "team" : <font color=darkblue><b>Response team Updated Successfully
+"team" --> "sportsGeek" : <font color=darkblue><b>Response team Updated Successfully
+"sportsGeek" --> Admin : <font color=darkblue><b> Response team Updated Successfully
+else #pink Not Found
+"database" --> "team" : <font color=darkblue><b>Response team Id not found
+deactivate "database"
+"team" --> "sportsGeek" : <font color=darkblue><b>Response team Id not found
+deactivate "team"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response team Id not found
+deactivate "sportsGeek"
+end alt
+
+Admin -> "sportsGeek": Delete team
+activate "sportsGeek" #lightblue
+note right #yellow
+        *params*
+        teamId=1
+        end note
+alt #white Delete team
+    "sportsGeek" -> "team" : Delete team
+    activate team #lightblue
+    team -> "database" : Delete team
+    activate "database" #lightblue
+    "database" --> "team" : <font color=darkblue><b>Response team Deleted Successfully
+"team" --> "sportsGeek" : <font color=darkblue><b>Response team Deleted Successfully
+"sportsGeek" --> Admin : <font color=darkblue><b>Response team Deleted Successfully
+else #pink Not Found
+"database" --> "team" : <font color=darkblue><b>Response team Id not found
+deactivate "database"
+"team" --> "sportsGeek" : <font color=darkblue><b>Response team Id not found
+deactivate "team"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response team Id not found
+deactivate "sportsGeek"
+end alt
+@enduml

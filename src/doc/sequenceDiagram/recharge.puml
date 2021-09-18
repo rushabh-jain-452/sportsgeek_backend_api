@@ -1,0 +1,144 @@
+@startuml
+header SportsGeek
+title User Recharge
+skinparam ParticipantPadding 10
+skinparam BoxPadding 20
+actor Admin
+box "SportsGeek System"
+ participant sportsGeek
+end box
+box "Recharge Service"
+ participant recharge
+end box
+box "database"
+    database database
+end box
+Admin -> sportsGeek: Get All recharges
+activate sportsGeek #lightblue
+alt #white Get All recharges
+    sportsGeek -> "recharge" : Get All recharges
+    activate recharge #lightblue
+    recharge -> "database" : Get All recharges
+    activate "database" #lightblue
+    "database" --> "recharge" : <font color=darkblue><b> Response recharges Details
+deactivate "database"
+"recharge" --> "sportsGeek" : <font color=darkblue><b> Response recharges Details
+deactivate "recharge"
+"sportsGeek" --> Admin : <font color=darkblue><b> Response recharges Details
+deactivate "sportsGeek"
+end alt
+
+Admin -> "sportsGeek": Get Recharge by Id
+activate sportsGeek #lightblue
+alt #white Get recharge By Id
+note right #yellow
+        *params*
+        rechargeId=123
+        end note
+    "sportsGeek" -> "recharge" : Get recharge By Id
+    activate recharge #lightblue
+    recharge -> "database" : Get recharge By Id
+    activate "database" #lightblue
+    "database" --> "recharge" : <font color=darkblue><b>Response recharge Details"
+deactivate "database"
+"recharge" --> "sportsGeek" : <font color=darkblue><b> Response recharges Details
+deactivate "recharge"
+"sportsGeek" --> Admin : <font color=darkblue><b> Response recharge Details
+deactivate "sportsGeek"
+end alt
+
+
+Admin -> "sportsGeek": Get Recharges of User
+activate sportsGeek #lightblue
+alt #white Get recharge By User Id
+note right #yellow
+        *params*
+        userid=123
+        end note
+    "sportsGeek" -> "recharge" : Get recharge By User
+    activate recharge #lightblue
+    recharge -> "database" : Get recharge By User
+    activate "database" #lightblue
+    "database" --> "recharge" : <font color=darkblue><b> Response recharge Details
+"recharge" --> "sportsGeek" : <font color=darkblue><b> Response recharge Details
+"sportsGeek" --> Admin : <font color=darkblue><b> Response recharge Details
+else #pink Not Found
+"database" --> "recharge" : <font color=darkblue><b> Response recharge Id Not Found
+deactivate "database"
+"recharge" --> "sportsGeek" : <font color=darkblue><b> Response recharge Id Not Found
+deactivate "recharge"
+"sportsGeek" --> Admin : <font color=darkblue><b> Response recharge Id Not Found
+deactivate "sportsGeek"
+end alt
+
+Admin -> "sportsGeek": Add Recharge
+activate sportsGeek #lightblue
+note right #yellow
+        *params*
+        userId=1
+        amount=100
+        end note
+alt #white Add recharges
+    "sportsGeek" -> "recharge" : Add recharge Details
+    activate recharge #lightblue
+    recharge -> "database" : Add recharge Details
+    activate "database" #lightblue
+    "database" --> "recharge" : <font color=darkblue><b>Response recharge Added Successfully
+"recharge" --> "sportsGeek" : <font color=darkblue><b>Response recharge Added Successfully
+"sportsGeek" --> Admin : <font color=darkblue><b>Response recharge Added Successfully
+else #pink Unable to Add recharge
+"database" --> "recharge" : <font color=darkblue><b>Unable to add recharge
+deactivate "database"
+"recharge" --> "sportsGeek" : <font color=darkblue><b>Response Unable to add recharge
+deactivate "recharge"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response Unable to add recharge
+deactivate "sportsGeek"
+end alt
+
+Admin -> "sportsGeek": Update Recharge
+activate sportsGeek #lightblue
+note right #yellow
+        *params*
+        rechargeId=1
+        amount=100
+        end note
+alt #white Update recharge
+ "sportsGeek" -> "recharge" : Update recharge
+activate recharge #lightblue
+    recharge -> "database" : Update recharge
+    activate "database" #lightblue
+    "database" --> "recharge" : <font color=darkblue><b>Response recharge Updated Successfully
+    "recharge" --> "sportsGeek" : <font color=darkblue><b>Response recharge Updated Successfully
+    "sportsGeek" --> Admin : <font color=darkblue><b>Response recharge Updated Successfully
+else #pink Not Found
+"database" --> "recharge" : <font color=darkblue><b>Response recharge Id not found
+deactivate "database"
+"recharge" --> "sportsGeek" : <font color=darkblue><b>Response recharge Id not found
+deactivate "recharge"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response recharge Id not found
+deactivate "sportsGeek"
+end alt
+
+Admin -> "sportsGeek": Delete Recharge
+activate sportsGeek #lightblue
+note right #yellow
+        *params*
+        rechargeId=1
+        end note
+alt #white Delete recharge
+ "sportsGeek" -> "recharge" : Delete recharge
+activate recharge #lightblue
+    recharge -> "database" : Delete recharge
+    activate "database" #lightblue
+    "database" --> "recharge" : <font color=darkblue><b>Response recharge deleted Successfully
+    "recharge" --> "sportsGeek" : <font color=darkblue><b>Response recharge deleted Successfully
+    "sportsGeek" --> Admin : <font color=darkblue><b>Response recharge deleted Successfully
+else #pink Not Found
+"database" --> "recharge" : <font color=darkblue><b>Response recharge Id not found
+deactivate "database"
+"recharge" --> "sportsGeek" : <font color=darkblue><b>Response recharge Id not found
+deactivate "recharge"
+"sportsGeek" --> Admin : <font color=darkblue><b>Response recharge Id not found
+deactivate "sportsGeek"
+end alt
+@enduml

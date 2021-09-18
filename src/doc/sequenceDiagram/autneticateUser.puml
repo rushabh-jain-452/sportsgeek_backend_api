@@ -1,0 +1,45 @@
+@startuml
+header SportsGeek
+title Authenticate User
+skinparam ParticipantPadding 10
+skinparam BoxPadding 20
+actor User
+box "SportsGeek System"
+ participant sportsGeek
+end box
+box "Authentication Service"
+ participant authenticate
+end box
+box "database"
+    database database
+end box
+
+User -> sportsGeek: Enter the credentials
+activate sportsGeek #lightblue
+note right #yellow
+    *params*
+    username=xyz123
+    password=*****
+    end note
+alt #white
+sportsGeek -> "authenticate" : Enter the credentials
+activate authenticate #lightblue
+    authenticate -> "database" : Check user credentials
+activate "database" #lightblue
+        "database" --> authenticate : <font color=darkblue><b>Response Get User Details
+deactivate "database"
+authenticate --> "authenticate" : authenticate user credentials
+alt #lightgreen user is valid
+"authenticate" --> "sportsGeek" : <font color=darkblue><b>Response Valid User
+"sportsGeek" --> User : <font color=darkblue><b>Response Valid User
+else #pink Bad Credentials
+"authenticate" --> "sportsGeek" : <font color=darkblue><b>Response Invalid username or password
+"sportsGeek" --> User : <font color=darkblue><b>Response Invalid username or password
+else #pink user is invalid
+"authenticate" --> "sportsGeek" : <font color=darkblue><b>Response Sorry! you have been blocked by the admin
+deactivate "authenticate"
+"sportsGeek" --> User : <font color=darkblue><b>Response Sorry! you have been blocked by the admin
+deactivate "sportsGeek"
+end alt
+end alt
+@enduml
