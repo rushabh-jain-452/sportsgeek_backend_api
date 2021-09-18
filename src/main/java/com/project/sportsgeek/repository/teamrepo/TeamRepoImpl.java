@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository(value = "teamRepo")
-public class TeamRepositoryImpl implements TeamRepository {
+public class TeamRepoImpl implements TeamRepository {
     @Autowired
     NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -37,8 +37,15 @@ public class TeamRepositoryImpl implements TeamRepository {
 
     @Override
     public int addTeam(Team team) throws Exception {
+        KeyHolder holder = new GeneratedKeyHolder();
         String sql = "INSERT INTO Team (Name,ShortName,TeamLogo) VALUES(:name,:shortName,:teamLogo)";
-        return jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(team));
+        int n = jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(team), holder);
+        if(n > 0 && holder.getKeys().size() > 0) {
+//            return holder.getKey().intValue();
+            return (int)holder.getKeys().get("TeamId");
+        }else {
+            return 0;
+        }
     }
 
     @Override

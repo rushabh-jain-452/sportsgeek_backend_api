@@ -12,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 
 import com.project.sportsgeek.mapper.ContestWithMatchRowMapper;
@@ -74,9 +76,14 @@ public class ContestRepoImpl implements ContestRepository {
 //        String sql = "INSERT INTO Contest (UserId, MatchId, TeamId, ContestPoints, WinningPoints) VALUES (:userId, :matchId, :teamId, :contestPoints, :winningPoints)";
         String sql = "INSERT INTO Contest (UserId, MatchId, TeamId, ContestPoints) VALUES (:userId, :matchId, :teamId, :contestPoints)";
         int n = jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(contest), holder);
+//        public int update(String sql, SqlParameterSource paramSource, KeyHolder generatedKeyHolder, @Nullable String[] keyColumnNames)
+//        int n = jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(contest), holder, new String[]{"ContestId"});
 //        System.out.println(n);
-        if(n > 0){
-            return holder.getKey().intValue();
+//        System.out.println(holder);
+        if(n > 0 && holder.getKeys().size() > 0){
+//            return holder.getKey().intValue();
+            return (int)holder.getKeys().get("ContestId");
+//            return 1;
         }
         return 0;
     }

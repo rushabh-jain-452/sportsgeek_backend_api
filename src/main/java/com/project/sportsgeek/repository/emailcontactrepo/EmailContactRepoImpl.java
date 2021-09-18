@@ -33,8 +33,9 @@ public class EmailContactRepoImpl implements EmailContactRepository {
         KeyHolder holder = new GeneratedKeyHolder();
         String sql = "INSERT INTO EmailContact (UserId, EmailId) values(:userId, :emailId)";
         int n = jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(emailContact), holder);
-        if(n > 0) {
-            return holder.getKey().intValue();
+        if(n > 0 && holder.getKeys().size() > 0) {
+//            return holder.getKey().intValue();
+            return (int)holder.getKeys().get("EmailContactId");
         }
         return 0;
     }

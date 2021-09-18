@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository(value = "genderRepo")
-public class GenderRepositoryImpl implements GenderRepository {
+public class GenderRepoImpl implements GenderRepository {
 
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
@@ -40,8 +40,9 @@ public class GenderRepositoryImpl implements GenderRepository {
         KeyHolder holder = new GeneratedKeyHolder();
         String sql = "INSERT INTO Gender (Name) values(:name)";
         int n = jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(gender), holder);
-        if(n > 0) {
-            return holder.getKey().intValue();
+        if(n > 0 && holder.getKeys().size() > 0) {
+//            return holder.getKey().intValue();
+            return (int)holder.getKeys().get("GenderId");
         }
         return 0;
     }

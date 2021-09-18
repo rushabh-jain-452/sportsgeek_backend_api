@@ -42,8 +42,9 @@ public class RoleRepoImpl implements RoleRepository {
         KeyHolder holder = new GeneratedKeyHolder();
         String sql = "INSERT INTO Role (Name) values(:name)";
         int n = jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(role), holder);
-        if(n > 0) {
-            return holder.getKey().intValue();
+        if(n > 0 && holder.getKeys().size() > 0) {
+//            return holder.getKey().intValue();
+            return (int)holder.getKeys().get("RoleId");
         }else {
             return 0;
         }

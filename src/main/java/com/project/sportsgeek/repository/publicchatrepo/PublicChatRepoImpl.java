@@ -30,7 +30,10 @@ public class PublicChatRepoImpl implements PublicChatRepository {
 
     @Override
     public List<PublicChatWithUser> findAllPublicChatForLastDays(int days) {
+//        MySQL
 //        String sql = "SELECT PublicChatId, pc.UserId as UserId, FirstName, LastName, ProfilePicture, Message, pc.Status as Status, ChatTimestamp FROM PublicChat as pc INNER JOIN Users as u on pc.UserId=u.UserId WHERE pc.Status=TRUE AND ChatTimestamp > DATE_SUB(CURRENT_TIMESTAMP, INTERVAL :days DAY) ORDER BY ChatTimestamp";
+//        String sql = "SELECT PublicChatId, pc.UserId as UserId, FirstName, LastName, ProfilePicture, Message, pc.Status as Status, ChatTimestamp FROM PublicChat as pc INNER JOIN Users as u on pc.UserId=u.UserId WHERE pc.Status=TRUE AND ChatTimestamp > DATE_SUB(CURRENT_TIMESTAMP, INTERVAL :days DAY) ORDER BY PublicChatId";
+//        PostgreSQL
         String sql = "SELECT PublicChatId, pc.UserId as UserId, FirstName, LastName, ProfilePicture, Message, pc.Status as Status, ChatTimestamp FROM PublicChat as pc INNER JOIN Users as u on pc.UserId=u.UserId WHERE pc.Status=TRUE AND ChatTimestamp > DATE_SUB(CURRENT_TIMESTAMP, INTERVAL :days DAY) ORDER BY PublicChatId";
         MapSqlParameterSource params = new MapSqlParameterSource("days", days);
         return jdbcTemplate.query(sql, params, new PublicChatWithUserRowMapper());
@@ -87,8 +90,12 @@ public class PublicChatRepoImpl implements PublicChatRepository {
     public int addPublicChat(PublicChat publicChat) throws Exception {
         KeyHolder holder = new GeneratedKeyHolder();
         String sql = "INSERT INTO PublicChat (userId, message) VALUES (:userId, :message)";
-        jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(publicChat), holder);
-        return holder.getKey().intValue();
+        int n = jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(publicChat), holder);
+        if(n > 0 && holder.getKeys().size() > 0) {
+//            return holder.getKey().intValue();
+            return (int)holder.getKeys().get("PublicChatId");
+        }
+        return 0;
     }
 
     @Override

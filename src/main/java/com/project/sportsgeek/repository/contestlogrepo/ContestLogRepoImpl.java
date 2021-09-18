@@ -29,8 +29,9 @@ public class ContestLogRepoImpl implements ContestLogRepository {
                 " VALUES(:userId, :matchId, :oldTeamId, :oldContestPoints, :newTeamId, :newContestPoints, :action)";
         int n = jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(contestLog), holder);
         System.out.println("n : " + n);
-        if(n > 0) {
-            return holder.getKey().intValue();
+        if(n > 0 && holder.getKeys().size() > 0) {
+//            return holder.getKey().intValue();
+            return (int)holder.getKeys().get("ContestLogId");
         }else {
             return 0;
         }

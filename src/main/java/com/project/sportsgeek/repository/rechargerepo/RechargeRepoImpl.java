@@ -50,8 +50,9 @@ public class RechargeRepoImpl implements RechargeRepository {
             KeyHolder holder = new GeneratedKeyHolder();
             String sql = "INSERT INTO Recharge(UserId, Points) VALUES(:userId, :points)";
             int n = jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(recharge), holder);
-            if(n > 0) {
-                return holder.getKey().intValue();
+            if(n > 0 && holder.getKeys().size() > 0) {
+//                return holder.getKey().intValue();
+                return (int)holder.getKeys().get("RechargeId");
             }else {
                 return 0;
             }

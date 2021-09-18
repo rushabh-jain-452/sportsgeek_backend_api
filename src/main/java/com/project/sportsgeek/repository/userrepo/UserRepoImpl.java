@@ -177,8 +177,9 @@ public class UserRepoImpl implements UserRepository {
 		String sql = "INSERT INTO Users (FirstName,LastName,GenderId,Username,Password,ProfilePicture,RoleId,AvailablePoints,Status)"
 				+ "values(:firstName,:lastName,:genderId,:Username,:password,:profilePicture,:roleId,:availablePoints,:status)";
 		int n = jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(userWithPassword), holder);
-		if(n > 0){
-			return holder.getKey().intValue();
+		if(n > 0 && holder.getKeys().size() > 0){
+//			return holder.getKey().intValue();
+			return (int)holder.getKeys().get("UserId");
 		}else{
 			return 0;
 		}

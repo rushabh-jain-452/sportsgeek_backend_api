@@ -41,8 +41,9 @@ public class VenueRepoImpl implements VenueRepository {
         KeyHolder holder = new GeneratedKeyHolder();
         String sql = "INSERT INTO Venue(Name) VALUES(:name)";
         int n = jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(venue), holder);
-        if(n > 0) {
-            return holder.getKey().intValue();
+        if(n > 0 && holder.getKeys().size() > 0) {
+//            return holder.getKey().intValue();
+            return (int)holder.getKeys().get("VenueId");
         }else {
             return 0;
         }

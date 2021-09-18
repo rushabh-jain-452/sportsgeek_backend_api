@@ -93,6 +93,10 @@ public class ContestService {
     public Result<Contest> updateContest(int contestId, Contest contest) throws Exception {
         // Get old Contest Points
         Contest oldContest = contestRepository.findContestById(contestId);
+//        System.out.println(contest.getContestPoints());
+//        System.out.println(userRepository.findUserByUserId(contest.getUserId()).getAvailablePoints());
+//        System.out.println(oldContest.getContestPoints());
+//        System.out.println(userRepository.findUserByUserId(contest.getUserId()).getAvailablePoints() + oldContest.getContestPoints());
         // Validation of Match StartTime
         Timestamp matchStartDatetime = matchesRepository.getMatchStartDatetimeById(contest.getMatchId());
         // Get Database Current Timestamp
