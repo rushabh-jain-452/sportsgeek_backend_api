@@ -30,13 +30,13 @@ public class ContestLogWithUserRowMapper implements RowMapper<ContestLogWithUser
             int newPoints = rs.getInt("NewContestPoints");
             msg += " changed ";
             if(!newTeamName.equals(oldTeamName) && newPoints != oldPoints){
-                msg += "bet from " + oldTeamName + " to " + newTeamName + " from " + oldPoints + " to " + newPoints + " points";
+                msg += "Bet from " + oldTeamName + " to " + newTeamName + " from " + oldPoints + " to " + newPoints + " points";
             }
             else if(newPoints != oldPoints){
-                msg += "points from " + oldPoints + " to " + newPoints + " for " + newTeamName;
+                msg += "Points from " + oldPoints + " to " + newPoints + " for " + newTeamName;
             }
             else if(!newTeamName.equals(oldTeamName)){
-                msg += "team from " + oldTeamName + " to " + newTeamName + " for " + newPoints + " points";
+                msg += "Team from " + oldTeamName + " to " + newTeamName + " for " + newPoints + " points";
             }
         }
         msg +=  " at " + getFormattedDate(rs.getTimestamp("LogTimestamp"));

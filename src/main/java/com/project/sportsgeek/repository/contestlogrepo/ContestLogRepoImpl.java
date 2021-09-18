@@ -43,7 +43,8 @@ public class ContestLogRepoImpl implements ContestLogRepository {
                 "FROM ContestLog as c INNER JOIN Users as u ON c.UserId=u.UserId " +
                 "INNER JOIN Matches as m ON m.MatchId=c.MatchId " +
                 "INNER JOIN Team as t1 ON m.Team1=t1.TeamId INNER JOIN Team as t2 ON m.Team2=t2.TeamId " +
-                "WHERE LogTimestamp > DATE_SUB(CURRENT_TIMESTAMP, INTERVAL :days DAY) " +
+//                "WHERE LogTimestamp > DATE_SUB(CURRENT_TIMESTAMP, INTERVAL :days DAY) " +
+                "WHERE LogTimestamp > (SELECT NOW() - INTERVAL '" + days + " days') " +
 //                "ORDER BY LogTimestamp";
 //                "ORDER BY LogTimestamp, ContestLogId";
                 "ORDER BY ContestLogId";
@@ -71,7 +72,8 @@ public class ContestLogRepoImpl implements ContestLogRepository {
                 "FROM ContestLog as c INNER JOIN Users as u ON c.UserId=u.UserId " +
                 "INNER JOIN Matches as m ON m.MatchId=c.MatchId " +
                 "INNER JOIN Team as t1 ON m.Team1=t1.TeamId INNER JOIN Team as t2 ON m.Team2=t2.TeamId " +
-                "WHERE LogTimestamp > DATE_SUB(CURRENT_TIMESTAMP, INTERVAL :days DAY) " +
+//                "WHERE LogTimestamp > DATE_SUB(CURRENT_TIMESTAMP, INTERVAL :days DAY) " +
+                "WHERE LogTimestamp > (SELECT NOW() - INTERVAL '" + days + " days') " +
 //                "ORDER BY LogTimestamp DESC";
 //                "ORDER BY LogTimestamp DESC, ContestLogId DESC";
                 "ORDER BY ContestLogId DESC";
