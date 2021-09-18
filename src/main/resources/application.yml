@@ -16,15 +16,16 @@ spring:
 #    password: ENC(MOofLqPHPH6tFL1xTbvOXycacmummo1X)
 #    driver-class-name: com.mysql.cj.jdbc.Driver
   datasource:
-    url: jdbc:mysql://mysql-47802-0.cloudclusters.net:18936/sportsgeekdb
-    username: ENC(xwGAuFlhPIZgRVGPeNAJlw==)
-    password: ENC(MOofLqPHPH6tFL1xTbvOXycacmummo1X)
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${JDBC_DATABASE_URL}
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  # To connect from localhost
 #  datasource:
-#    url: jdbc:mysql://sql6.freemysqlhosting.net:3306/sql6424715
-#    username: ENC(FCd5qEM1fOun6OB15QppJt/TVe2bDUcG)
-#    password: ENC(/5zX6a50MiztKkU4+NtQwLgkANegOe9n)
-#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:postgres://ec2-54-81-126-150.compute-1.amazonaws.com:5432/d8qgprvb42vck1
+#    username: byptbshshocrii
+#    password: d8a8409d4bd09c28ed55ab557c3b8e6bc33343ef3f43ff3abf0491172df80ff1
+#    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
