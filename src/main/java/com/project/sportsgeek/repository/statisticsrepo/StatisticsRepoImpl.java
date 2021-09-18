@@ -23,7 +23,7 @@ public class StatisticsRepoImpl implements  StatisticsRepository {
 //        String sql = "SELECT UserId, FirstName, LastName, UserName,AvailablePoints as TotalWinningPoints FROM Users ORDER BY AvailablePoints DESC";
 
         String sql = "SELECT u.UserId as UserId, FirstName, LastName, UserName, ProfilePicture, AvailablePoints " +
-                "FROM Users as u LEFT JOIN Contest as c ON u.UserId=c.UserId WHERE u.Status=1 " +
+                "FROM Users as u LEFT JOIN Contest as c ON u.UserId=c.UserId WHERE u.Status=TRUE " +
                 "GROUP BY u.UserId ORDER BY AvailablePoints DESC";
         return jdbcTemplate.query(sql, new StatisticsRowMapper());
     }
