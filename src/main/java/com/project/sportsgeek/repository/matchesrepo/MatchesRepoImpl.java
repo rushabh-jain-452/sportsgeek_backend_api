@@ -199,7 +199,7 @@ public class MatchesRepoImpl implements MatchesRepository {
 
     @Override
     public Timestamp getCurrentTimestamp() {
-        String sql = "SELECT CURRENT_TIMESTAMP()";
+        String sql = "SELECT CURRENT_TIMESTAMP";
         Timestamp currentTimestamp = namedParameterJdbcTemplate.queryForObject(sql, new BeanPropertySqlParameterSource(sql), Timestamp.class);
         return currentTimestamp;
     }
