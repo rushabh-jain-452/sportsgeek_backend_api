@@ -44,7 +44,7 @@ public class RechargeService {
         if (rechargeList.size() > 0) {
             return new Result<>(200, rechargeList);
         }
-        throw new ResultException(new Result<>(404, "Recharge for user with userIdd: "+ userId +" not found"));
+        throw new ResultException(new Result<>(404, "Recharge for user with userId: "+ userId +" not found"));
     }
 
     public Result<Recharge> addRecharge(Recharge recharge) throws Exception {
