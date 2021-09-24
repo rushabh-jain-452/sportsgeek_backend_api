@@ -4,19 +4,25 @@ import com.project.sportsgeek.mapper.MatchesRowMapper;
 import com.project.sportsgeek.mapper.TournamentRowMapper;
 import com.project.sportsgeek.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.CallableStatementCreator;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ParameterMapper;
+import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
+import org.springframework.jdbc.object.StoredProcedure;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository(value = "matchesRepo")
 public class MatchesRepoImpl implements MatchesRepository {
@@ -132,24 +138,185 @@ public class MatchesRepoImpl implements MatchesRepository {
         return namedParameterJdbcTemplate.update(sql, new BeanPropertySqlParameterSource(matches)) > 0;
     }
 
+    // Calling Stored Procedure
+//    @Override
+//    public boolean updateMatchWinningTeam(int matchId, int resultStatus, int winningTeamId) throws Exception {
+//        try
+//        {
+////            Params with name
+//            SqlParameterSource params = new MapSqlParameterSource()
+//                    .addValue("vMatchId", matchId)
+//                    .addValue("vResultStatus",resultStatus)
+//                    .addValue("vWinnerTeamId",winningTeamId);
+//
+//            // Params with position
+////            Map<String, Object> paramsMap = new HashMap<>();
+////            paramsMap.put("vMatchId", matchId);
+////            paramsMap.put("vResultStatus", resultStatus);
+////            paramsMap.put("vWinnerTeamId", winningTeamId);
+////            SqlParameterSource parameterSource = new MapSqlParameterSource(paramsMap);
+//
+////            simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate).withProcedureName("setMatchResult");
+//            simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate).withProcedureName("setmatchresult");
+//            simpleJdbcCall.execute(params);
+////            simpleJdbcCall.execute(parameterSource);
+//            return true;
+//        }catch (Exception ex) {
+//            System.out.println(ex.getMessage());
+//            ex.printStackTrace();
+//            return false;
+//        }
+//    }
+
+//    @Override
+//    public boolean updateMatchWinningTeam(int matchId, int resultStatus, int winnerTeamId) throws Exception {
+//        try
+//        {
+//            List<SqlParameter> params = Arrays.asList(new SqlParameter(Types.NVARCHAR));
+//            jdbcTemplate.call(new CallableStatementCreator() {
+//                @Override
+//                public CallableStatement createCallableStatement(Connection connection) throws SQLException {
+//                    CallableStatement cs = connection.prepareCall("{call setMatchResult(?,?,?)}");
+//                   //  Params with position
+//                    cs.setInt(1, matchId);
+//                    cs.setInt(2, resultStatus);
+//                    cs.setInt(3, winnerTeamId);
+//                    return cs;
+//                }
+//            }, params);
+//            return true;
+//        }catch (Exception ex) {
+//            System.out.println(ex.getMessage());
+//            ex.printStackTrace();
+//            return false;
+//        }
+//    }
+
+//    @Override
+//    public boolean updateMatchWinningTeam(int matchId, int resultStatus, int winningTeamId) throws Exception {
+//        try
+//        {
+//            MyStoredProcedure myStoredProcedure = new MyStoredProcedure(jdbcTemplate, "setMatchResult");
+//
+//            SqlParameter param1 = new SqlParameter("vMatchId", Types.INTEGER);
+//            SqlParameter param2 = new SqlParameter("vResultStatus", Types.INTEGER);
+//            SqlParameter param3 = new SqlParameter("vWinnerTeamId", Types.INTEGER);
+//
+//            SqlParameter[] paramArray = {param1, param2, param3};
+//
+//            myStoredProcedure.setParameters(paramArray);
+//            myStoredProcedure.compile();
+//            myStoredProcedure.setJdbcTemplate(jdbcTemplate);
+//
+////            Map<String, Object> paramsMap = new HashMap<>();
+////            paramsMap.put("vMatchId", matchId);
+////            paramsMap.put("vResultStatus", resultStatus);
+////            paramsMap.put("vWinnerTeamId", winningTeamId);
+////            SqlParameterSource parameterSource = new MapSqlParameterSource(paramsMap);
+//
+////            public Map<String, Object> execute(Object... inParams)
+////            public Map<String, Object> execute(Map<String, ?> inParams)
+////            public Map<String, Object> execute(ParameterMapper inParamMapper)
+//            myStoredProcedure.execute(matchId, resultStatus, winningTeamId);
+//            return true;
+//        }catch (Exception ex) {
+//            System.out.println(ex.getMessage());
+//            ex.printStackTrace();
+//            return false;
+//        }
+//    }
+
+//    Calling Stored Function
     @Override
-    public boolean updateMatchWinningTeam(int matchId, int ResultStatus, int winningTeamId) throws Exception {
+    public boolean updateMatchWinningTeam(int matchId, int resultStatus, int winningTeamId) throws Exception {
+//        System.out.println("Setting Match Result...");
         try
         {
-            SqlParameterSource in = new MapSqlParameterSource()
+//            jdbcTemplate.setResultsMapCaseInsensitive(true);
+//            Params with name
+            SqlParameterSource params = new MapSqlParameterSource()
                     .addValue("vMatchId", matchId)
-                    .addValue("vResultStatus",ResultStatus)
+                    .addValue("vResultStatus",resultStatus)
                     .addValue("vWinnerTeamId",winningTeamId);
 
-            simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
-                    .withProcedureName("setMatchResult");
-            simpleJdbcCall.execute(in);
+            simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate).withProcedureName("setMatchResultFun");
+//            simpleJdbcCall.execute(params);
+//            int n = simpleJdbcCall.executeFunction(Integer.class, params);
+            simpleJdbcCall.executeFunction(Integer.class, params);
+//            System.out.println("n : " + n);  // getting "null"
+//            if(n == 1){
+//                return true;
+//            }else{
+//                return false;
+//            }
             return true;
-        }catch (Exception e) {
-            System.out.println(e.getMessage());
+        }catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
             return false;
         }
     }
+
+//    @Override
+//    public boolean updateMatchWinningTeam(int matchId, int resultStatus, int winningTeamId) throws Exception {
+//        System.out.println("Setting Match Result...");
+//        try
+//        {
+//            MyStoredProcedure myStoredProcedure = new MyStoredProcedure(jdbcTemplate, "setMatchResultFun");
+//
+//            SqlParameter param1 = new SqlParameter("vMatchId", Types.INTEGER);
+//            SqlParameter param2 = new SqlParameter("vResultStatus", Types.INTEGER);
+//            SqlParameter param3 = new SqlParameter("vWinnerTeamId", Types.INTEGER);
+//
+//            SqlParameter[] paramArray = {param1, param2, param3};
+//
+//            myStoredProcedure.setParameters(paramArray);
+//            myStoredProcedure.compile();
+//            myStoredProcedure.setJdbcTemplate(jdbcTemplate);
+//
+////            Map<String, Object> paramsMap = new HashMap<>();
+////            paramsMap.put("vMatchId", matchId);
+////            paramsMap.put("vResultStatus", resultStatus);
+////            paramsMap.put("vWinnerTeamId", winningTeamId);
+////            SqlParameterSource parameterSource = new MapSqlParameterSource(paramsMap);
+//
+////            public Map<String, Object> execute(Object... inParams)
+////            public Map<String, Object> execute(Map<String, ?> inParams)
+////            public Map<String, Object> execute(ParameterMapper inParamMapper)
+//            myStoredProcedure.execute(matchId, resultStatus, winningTeamId);
+//            return true;
+//        }catch (Exception ex) {
+//            System.out.println(ex.getMessage());
+//            ex.printStackTrace();
+//            return false;
+//        }
+//    }
+
+//    @Override
+//    public boolean updateMatchWinningTeam(int matchId, int resultStatus, int winnerTeamId) throws Exception {
+//        System.out.println("Setting Match Result...");
+//        try
+//        {
+//            List<SqlParameter> params = Arrays.asList(new SqlParameter(Types.INTEGER));
+//            jdbcTemplate.call(new CallableStatementCreator() {
+//                @Override
+//                public CallableStatement createCallableStatement(Connection connection) throws SQLException {
+//                    CallableStatement cs = connection.prepareCall("{? = call setMatchResultFun(?,?,?)}");
+//                    cs.registerOutParameter(1, Types.INTEGER);
+//                   //  Params with position
+//                    cs.setInt(2, matchId);
+//                    cs.setInt(3, resultStatus);
+//                    cs.setInt(4, winnerTeamId);
+//                    return cs;
+//                }
+//            }, params);
+//            return true;
+//        }catch (Exception ex) {
+//            System.out.println(ex.getMessage());
+//            ex.printStackTrace();
+//            return false;
+//        }
+//    }
 
     @Override
     public boolean updateMatchVenue(int matchId, int venueId) throws Exception {
@@ -203,6 +370,16 @@ public class MatchesRepoImpl implements MatchesRepository {
         String sql = "SELECT CURRENT_TIMESTAMP";
         Timestamp currentTimestamp = namedParameterJdbcTemplate.queryForObject(sql, new BeanPropertySqlParameterSource(sql), Timestamp.class);
         return currentTimestamp;
+    }
+
+}
+
+class MyStoredProcedure extends StoredProcedure {
+
+    public MyStoredProcedure(JdbcTemplate jdbcTemplate, String procName) {
+        super(jdbcTemplate, procName);
+        setFunction(false);
+//        setFunction(true);
     }
 
 }

@@ -99,10 +99,10 @@ public class MatchesService {
     }
 
     public Result<String> updateMatchWinningTeam(int matchId, int ResultStatus, int winningTeamId) throws Exception {
-        if(matchesRepository.updateMatchWinningTeam(matchId, ResultStatus, winningTeamId)== true) {
+        if(matchesRepository.updateMatchWinningTeam(matchId, ResultStatus, winningTeamId) == true) {
             return new Result<>(200, "Match Result updated successfully!!");
         }
-        throw new ResultException(new Result<>(404, "Failed to Update Match Result!!"));
+        throw new ResultException(new Result<>(500, "Failed to Update Match Result!!"));
     }
 
     public Result<String> updateMinimumPoints(int matchId, int minPoints) throws Exception {

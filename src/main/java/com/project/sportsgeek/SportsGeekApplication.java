@@ -20,6 +20,7 @@ public class SportsGeekApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SportsGeekApplication.class, args);
 	}
+
 	@Bean
 	public Docket api(){
 		return new Docket(DocumentationType.SWAGGER_2);
