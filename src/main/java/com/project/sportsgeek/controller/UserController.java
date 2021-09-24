@@ -240,7 +240,7 @@ public class UserController {
             @ApiResponse(code = 404, message = "Schema not found"),
             @ApiResponse(code = 409, message = "Schema is in use"),
             @ApiResponse(code = 500, message = "Error deleting schema")})
-//    @PreAuthorize("hasAnyRole('Admin','User')")
+    @PreAuthorize("hasAnyRole('Admin','User')")
     @DeleteMapping("/{userId}/remove-profile-picture")
     public ResponseEntity<Result<String>> deleteUserProfilePicture(@PathVariable int userId) throws Exception {
         Result<String> userResult = userService.deleteUserProfilePicture(userId);
