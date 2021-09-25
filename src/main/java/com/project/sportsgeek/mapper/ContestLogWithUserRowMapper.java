@@ -19,7 +19,7 @@ public class ContestLogWithUserRowMapper implements RowMapper<ContestLogWithUser
         String team1Name = rs.getString("Team1Name");
         String team2Name = rs.getString("Team2Name");
         String newTeamName = rs.getInt("NewTeamId") == rs.getInt("Team1") ? team1Name : team2Name;
-        String msg = team1Name + " vs " + team2Name + " " + getFormattedDate(matchStartDatetime);
+        String msg = team1Name + " vs " + team2Name + " " + getFormattedDate(matchStartDatetime) + " IST";
         msg += " -> " + rs.getString("FirstName") + " " + rs.getString("LastName");
         if(rs.getString("Action").equals("INSERT")){
             msg += " placed Bet on " + newTeamName + " for " + rs.getInt("NewContestPoints") + " points";
