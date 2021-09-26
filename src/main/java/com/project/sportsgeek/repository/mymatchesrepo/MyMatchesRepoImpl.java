@@ -30,14 +30,26 @@ public class MyMatchesRepoImpl implements MyMatchesRepository {
 
     @Override
     public List<MyMatches> findLiveContestByUserId(int userId) throws Exception {
-        String sql = " SELECT StartDatetime, t3.ShortName as TeamName, c.MatchId as MatchId, ContestPoints, t1.ShortName as Team1Short, t1.TeamLogo as Team1Logo, t2.ShortName as Team2Short, t2.TeamLogo as Team2Logo, v.Name as Venue\n" +
-                "        FROM Matches as m inner join Team as t1 on m.Team1=t1.TeamId\n" +
-                "        inner join Team as t2 on m.Team2=t2.TeamId\n" +
-                "        inner join Contest as c on c.MatchId = m.MatchId\n" +
-                "        inner join Team as t3 on c.TeamId = t3.TeamId\n" +
-                "        inner join Venue as v on m.VenueId = v.VenueId WHERE  date(m.StartDatetime) = current_date and StartDatetime <= current_timestamp  and ResultStatus IS NULL  and c.UserId=:userId order by StartDatetime DESC";
+        String countSql = "SELECT COUNT(*) FROM Contest WHERE UserId=:userId AND MatchId IN (SELECT MatchId FROM Matches WHERE StartDatetime <= current_timestamp and ResultStatus IS NULL);";
         MapSqlParameterSource params = new MapSqlParameterSource("userId", userId);
-        return jdbcTemplate.query(sql, params, new MyMatchesRowMapper());
+        int count = jdbcTemplate.queryForObject(countSql, params, Integer.class);
+        if(count > 0){
+            String sql = " SELECT StartDatetime, t3.ShortName as TeamName, c.MatchId as MatchId, ContestPoints, t1.ShortName as Team1Short, t1.TeamLogo as Team1Logo, t2.ShortName as Team2Short, t2.TeamLogo as Team2Logo, v.Name as Venue\n" +
+                    "        FROM Matches as m inner join Team as t1 on m.Team1=t1.TeamId\n" +
+                    "        inner join Team as t2 on m.Team2=t2.TeamId\n" +
+                    "        inner join Contest as c on c.MatchId = m.MatchId\n" +
+                    "        inner join Team as t3 on c.TeamId = t3.TeamId\n" +
+                    "        inner join Venue as v on m.VenueId = v.VenueId WHERE date(m.StartDatetime) = current_date and StartDatetime <= current_timestamp  and ResultStatus IS NULL and c.UserId=:userId order by StartDatetime DESC";
+//        MapSqlParameterSource params = new MapSqlParameterSource("userId", userId);
+            return jdbcTemplate.query(sql, params, new MyMatchesRowMapper());
+        } else {
+            String sql = "SELECT StartDatetime, m.MatchId as MatchId, t1.ShortName as Team1Short, t1.TeamLogo as Team1Logo, t2.ShortName as Team2Short, t2.TeamLogo as Team2Logo, v.Name as Venue, 'NA' AS TeamName, 0 AS ContestPoints\n" +
+                    "FROM Matches as m inner join Team as t1 on m.Team1=t1.TeamId\n" +
+                    "inner join Team as t2 on m.Team2=t2.TeamId\n" +
+                    "inner join Venue as v on m.VenueId = v.VenueId \n" +
+                    "WHERE date(m.StartDatetime) = current_date and StartDatetime <= current_timestamp and ResultStatus IS NULL order by StartDatetime DESC;";
+            return jdbcTemplate.query(sql, params, new MyMatchesRowMapper());
+        }
     }
 
     @Override
