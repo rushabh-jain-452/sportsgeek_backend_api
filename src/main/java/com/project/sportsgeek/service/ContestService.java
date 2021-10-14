@@ -126,7 +126,8 @@ public class ContestService {
                     contestLog.setOldTeamId(oldContest.getTeamId());
                     contestLog.setOldContestPoints(oldContest.getContestPoints());
                     contestLog.setNewTeamId(contest.getTeamId());
-                    contestLog.setNewContestPoints(contest.getContestPoints());
+//                    contestLog.setNewContestPoints(contest.getContestPoints());
+                    contestLog.setNewContestPoints(oldContest.getContestPoints());
                     contestLog.setAction("UPDATE");
                     contestLogRepository.addContestLog(contestLog);
                     if(result){
