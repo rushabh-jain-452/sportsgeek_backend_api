@@ -120,7 +120,8 @@ public class ContestService {
             if(oldContest.getTeamId() != contest.getTeamId() || oldContest.getContestPoints() != oldContest.getContestPoints()){
                 if (contestRepository.updateContest(contestId, contest)) {
                     // Update User Available Points
-                    boolean result = userRepository.addAvailablePoints(contest.getUserId(), oldContest.getContestPoints() - contest.getContestPoints());
+                    // No need to update User Available points
+//                    boolean result = userRepository.addAvailablePoints(contest.getUserId(), oldContest.getContestPoints() - contest.getContestPoints());
                     // Log Contest in ContestLog Table
                     ContestLog contestLog = new ContestLog();
                     contestLog.setUserId(contest.getUserId());
@@ -132,10 +133,11 @@ public class ContestService {
                     contestLog.setNewContestPoints(oldContest.getContestPoints());
                     contestLog.setAction("UPDATE");
                     contestLogRepository.addContestLog(contestLog);
-                    if(result){
-                        return new Result<>(200, contest);
-                    }
-                    throw new ResultException(new Result<>(500, "Unable to update user available points."));
+//                    if(result){
+//                        return new Result<>(200, contest);
+//                    }
+                    return new Result<>(200, contest);
+//                    throw new ResultException(new Result<>(500, "Unable to update user available points."));
                 }
                 throw new ResultException(new Result(404, "Bet not found."));
             }else{
