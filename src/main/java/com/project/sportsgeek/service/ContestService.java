@@ -57,15 +57,16 @@ public class ContestService {
             throw new ResultException(new Result<>(403, "Bet cannot be placed as the Match has already started."));
         }
         // Validate with Minimum Contest Points
-        else if(contest.getContestPoints() < matchesRepository.findMatchById(contest.getMatchId()).getMinimumPoints()){
-            throw new ResultException(new Result<>(400, "Bet points is less than minimum bet points."));
-        }
+//        else if(contest.getContestPoints() < matchesRepository.findMatchById(contest.getMatchId()).getMinimumPoints()){
+//            throw new ResultException(new Result<>(400, "Bet points is less than minimum bet points."));
+//        }
         // Validate with User Available Points
-        else if(contest.getContestPoints() > userRepository.findUserByUserId(contest.getUserId()).getAvailablePoints()){
-            throw new ResultException(new Result<>(400, "Bet points is greater than user available points."));
-        }
+//        else if(contest.getContestPoints() > userRepository.findUserByUserId(contest.getUserId()).getAvailablePoints()){
+//            throw new ResultException(new Result<>(400, "Bet points is greater than user available points."));
+//        }
         else{
             // Validation success, so add contest
+            contest.setContestPoints(userRepository.findUserByUserId(contest.getUserId()).getAvailablePoints());
             int contestId = contestRepository.addContest(contest);
             if (contestId > 0) {
                 contest.setContestId(contestId);
