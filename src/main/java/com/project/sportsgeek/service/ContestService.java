@@ -115,7 +115,9 @@ public class ContestService {
         }
         else{
             contest.setContestId(contestId);
-            if(oldContest.getTeamId() != contest.getTeamId() || oldContest.getContestPoints() != contest.getContestPoints()){
+//            if(oldContest.getTeamId() != contest.getTeamId() || oldContest.getContestPoints() != contest.getContestPoints()){
+            // Change for last match
+            if(oldContest.getTeamId() != contest.getTeamId() || oldContest.getContestPoints() != oldContest.getContestPoints()){
                 if (contestRepository.updateContest(contestId, contest)) {
                     // Update User Available Points
                     boolean result = userRepository.addAvailablePoints(contest.getUserId(), oldContest.getContestPoints() - contest.getContestPoints());
