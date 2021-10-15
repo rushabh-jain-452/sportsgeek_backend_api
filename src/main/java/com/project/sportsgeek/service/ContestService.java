@@ -57,16 +57,17 @@ public class ContestService {
             throw new ResultException(new Result<>(403, "Bet cannot be placed as the Match has already started."));
         }
         // Validate with Minimum Contest Points
-//        else if(contest.getContestPoints() < matchesRepository.findMatchById(contest.getMatchId()).getMinimumPoints()){
-//            throw new ResultException(new Result<>(400, "Bet points is less than minimum bet points."));
-//        }
+        else if(contest.getContestPoints() < matchesRepository.findMatchById(contest.getMatchId()).getMinimumPoints()){
+            throw new ResultException(new Result<>(400, "Bet points is less than minimum bet points."));
+        }
         // Validate with User Available Points
-//        else if(contest.getContestPoints() > userRepository.findUserByUserId(contest.getUserId()).getAvailablePoints()){
-//            throw new ResultException(new Result<>(400, "Bet points is greater than user available points."));
-//        }
+        else if(contest.getContestPoints() > userRepository.findUserByUserId(contest.getUserId()).getAvailablePoints()){
+            throw new ResultException(new Result<>(400, "Bet points is greater than user available points."));
+        }
         else{
             // Validation success, so add contest
-            contest.setContestPoints(userRepository.findUserByUserId(contest.getUserId()).getAvailablePoints());
+//            For last match
+//            contest.setContestPoints(userRepository.findUserByUserId(contest.getUserId()).getAvailablePoints());
             int contestId = contestRepository.addContest(contest);
             if (contestId > 0) {
                 contest.setContestId(contestId);
@@ -115,13 +116,13 @@ public class ContestService {
         }
         else{
             contest.setContestId(contestId);
-//            if(oldContest.getTeamId() != contest.getTeamId() || oldContest.getContestPoints() != contest.getContestPoints()){
-            // Change for last match
-            if(oldContest.getTeamId() != contest.getTeamId() || oldContest.getContestPoints() != oldContest.getContestPoints()){
+            if(oldContest.getTeamId() != contest.getTeamId() || oldContest.getContestPoints() != contest.getContestPoints()){
+            // For last match
+//            if(oldContest.getTeamId() != contest.getTeamId() || oldContest.getContestPoints() != oldContest.getContestPoints()){
                 if (contestRepository.updateContest(contestId, contest)) {
                     // Update User Available Points
-                    // No need to update User Available points
-//                    boolean result = userRepository.addAvailablePoints(contest.getUserId(), oldContest.getContestPoints() - contest.getContestPoints());
+                    // No need to update User Available points for last match, so comment below line
+                    boolean result = userRepository.addAvailablePoints(contest.getUserId(), oldContest.getContestPoints() - contest.getContestPoints());
                     // Log Contest in ContestLog Table
                     ContestLog contestLog = new ContestLog();
                     contestLog.setUserId(contest.getUserId());
@@ -129,15 +130,17 @@ public class ContestService {
                     contestLog.setOldTeamId(oldContest.getTeamId());
                     contestLog.setOldContestPoints(oldContest.getContestPoints());
                     contestLog.setNewTeamId(contest.getTeamId());
-//                    contestLog.setNewContestPoints(contest.getContestPoints());
-                    contestLog.setNewContestPoints(oldContest.getContestPoints());
+                    contestLog.setNewContestPoints(contest.getContestPoints());
+//                    For last match
+//                    contestLog.setNewContestPoints(oldContest.getContestPoints());
                     contestLog.setAction("UPDATE");
                     contestLogRepository.addContestLog(contestLog);
-//                    if(result){
-//                        return new Result<>(200, contest);
-//                    }
-                    return new Result<>(200, contest);
-//                    throw new ResultException(new Result<>(500, "Unable to update user available points."));
+                    if(result){
+                        return new Result<>(200, contest);
+                    }
+//                    For last match
+//                    return new Result<>(200, contest);
+                    throw new ResultException(new Result<>(500, "Unable to update user available points."));
                 }
                 throw new ResultException(new Result(404, "Bet not found."));
             }else{

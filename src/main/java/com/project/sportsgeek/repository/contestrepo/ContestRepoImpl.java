@@ -93,9 +93,9 @@ public class ContestRepoImpl implements ContestRepository {
     @Override
     public boolean updateContest(int contestId, Contest contest) throws Exception {
         contest.setContestId(contestId);
-//        String sql = "Update Contest SET TeamId = :teamId, ContestPoints = :contestPoints, UpdateTimestamp=CURRENT_TIMESTAMP WHERE ContestId = :contestId";
-        // Don't update contest points
-        String sql = "Update Contest SET TeamId = :teamId, UpdateTimestamp=CURRENT_TIMESTAMP WHERE ContestId = :contestId";
+        String sql = "Update Contest SET TeamId = :teamId, ContestPoints = :contestPoints, UpdateTimestamp=CURRENT_TIMESTAMP WHERE ContestId = :contestId";
+        // For last match : Don't update contest points
+//        String sql = "Update Contest SET TeamId = :teamId, UpdateTimestamp=CURRENT_TIMESTAMP WHERE ContestId = :contestId";
 //        Error : column "StartDatetime" doesn't exists in Contest table
 //        String sql = "Update Contest SET TeamId = :teamId, ContestPoints = :contestPoints, UpdateTimestamp=CURRENT_TIMESTAMP WHERE ContestId = :contestId AND CURRENT_TIMESTAMP <= StartDatetime";
         return jdbcTemplate.update(sql,new BeanPropertySqlParameterSource(contest)) > 0;
