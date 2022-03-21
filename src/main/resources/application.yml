@@ -45,8 +45,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-#    username: sportsgeek.info@gmail.com
-    username: alerts.sportsgeek@gmail.com
+    username: sportsgeek.info@gmail.com
+#    username: alerts.sportsgeek@gmail.com
     password: ENC(jtgUkGZLn5sHz8UgrZxft2wp4IyKQxouPRVN07zxP5w=)
     properties:
       mail:
